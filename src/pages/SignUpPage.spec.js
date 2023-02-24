@@ -1,5 +1,6 @@
 import SignUpPage from "./SignUpPage.vue";
 import { render, screen } from "@testing-library/vue";
+import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
 describe("Sign Up Page", () => {
@@ -52,7 +53,21 @@ describe("Sign Up Page", () => {
     it("has disabled button initially", () => {
       render(SignUpPage);
       const button = screen.queryByTestId("submit");
-      expect(button).toHaveAttribute("disabled");
+      expect(button).toBeDisabled();
+    });
+  });
+
+  describe("Interactions", () => {
+    it("enables the sign up button when the password and password repeat fields have same value", async () => {
+      render(SignUpPage);
+      const passowrd = screen.queryByTestId("passwordInput");
+      const passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
+      const button = screen.queryByTestId("submit");
+
+      await userEvent.type(passowrd, 'P@$$word4')
+      await userEvent.type(passowrdRepeat, 'P@$$word4')
+      
+      expect(button).not.toBeDisabled()
     });
   });
 });
