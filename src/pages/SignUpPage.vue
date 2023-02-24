@@ -31,6 +31,7 @@
 
 <script>
 export default {
+  name: "SignUpPage",
   data() {
     return {
       password: "",
