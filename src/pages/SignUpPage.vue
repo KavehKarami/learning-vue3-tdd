@@ -12,17 +12,40 @@
     <input
       id="password"
       type="password"
-      placeholder="Passowrd"
+      v-model="password"
+      placeholder="Password"
       data-testid="passwordInput"
     />
     <label for="password-repeat">Password Repeat</label>
     <input
       id="password-repeat"
       type="password"
-      placeholder="Passowrd Repeat"
+      v-model="passwordRepeat"
+      placeholder="Password Repeat"
       data-testid="passwordRepeatInput"
     />
 
-    <button data-testid="submit" disabled>Sign Up</button>
+    <button data-testid="submit" :disabled="isButtonDisabled">Sign Up</button>
   </form>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      password: "",
+      passwordRepeat: "",
+    };
+  },
+
+  computed: {
+    isButtonDisabled() {
+      return !(
+        this.password === this.passwordRepeat &&
+        this.password &&
+        this.passwordRepeat
+      );
+    },
+  },
+};
+</script>
