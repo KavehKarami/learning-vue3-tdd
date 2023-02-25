@@ -3,10 +3,15 @@
 
   <form>
     <label for="username">Username</label>
-    <input id="username" placeholder="username" />
+    <input id="username" placeholder="username" v-model="username" />
 
     <label for="email">E-mail</label>
-    <input id="email" placeholder="email" data-testid="emailInput" />
+    <input
+      id="email"
+      placeholder="email"
+      data-testid="emailInput"
+      v-model="email"
+    />
 
     <label for="password">Password</label>
     <input
@@ -25,15 +30,24 @@
       data-testid="passwordRepeatInput"
     />
 
-    <button data-testid="submit" :disabled="isButtonDisabled">Sign Up</button>
+    <button
+      data-testid="submit"
+      :disabled="isButtonDisabled"
+      @click.prevent="handleSignUp"
+    >
+      Sign Up
+    </button>
   </form>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "SignUpPage",
   data() {
     return {
+      username: "",
+      email: "",
       password: "",
       passwordRepeat: "",
     };
@@ -46,6 +60,16 @@ export default {
         this.password &&
         this.passwordRepeat
       );
+    },
+  },
+
+  methods: {
+    handleSignUp() {
+      axios.post("/api/v1/signup", {
+        username: this.username,
+        email: this.email,
+        password: this.password,
+      });
     },
   },
 };
