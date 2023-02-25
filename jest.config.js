@@ -7,5 +7,5 @@ module.exports = {
   testEnvironmentOptions: {
     customExportConditions: ["node", "node-addons"],
   },
-  moduleFileExtentions: ["js", "vue", "json"],
+  moduleFileExtensions: ["js", "vue", "json"],
 };
