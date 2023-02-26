@@ -65,7 +65,7 @@ export default {
 
   methods: {
     handleSignUp() {
-      axios.post("/api/v1/signup", {
+      axios.post("/api/1.0/users", {
         username: this.username,
         email: this.email,
         password: this.password,
