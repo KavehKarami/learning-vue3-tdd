@@ -84,7 +84,7 @@ describe("Sign Up Page", () => {
     it("sends username email and password to backend after clicking the button", async () => {
       let requestBody;
       const server = setupServer(
-        rest.post("/api/v1/signup", async (req, res, ctx) => {
+        rest.post("/api/1.0/users", async (req, res, ctx) => {
           requestBody = await req.json();
           return res(ctx.json({ status_code: 200 }));
         })
