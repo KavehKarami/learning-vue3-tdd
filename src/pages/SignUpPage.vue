@@ -1,43 +1,67 @@
 <template>
-  <h1>Sign Up Page</h1>
+  <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2">
+    <div class="mt-5 card">
+      <h1 class="card-header text-center">Sign Up Page</h1>
+      <form class="card-body">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input
+            id="username"
+            class="form-control"
+            placeholder="username"
+            v-model="username"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">E-mail</label>
+          <input
+            id="email"
+            class="form-control"
+            placeholder="email"
+            data-testid="emailInput"
+            v-model="email"
+          />
+        </div>
 
-  <form>
-    <label for="username">Username</label>
-    <input id="username" placeholder="username" v-model="username" />
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            id="password"
+            type="password"
+            class="form-control"
+            v-model="password"
+            placeholder="Password"
+            data-testid="passwordInput"
+          />
+        </div>
 
-    <label for="email">E-mail</label>
-    <input
-      id="email"
-      placeholder="email"
-      data-testid="emailInput"
-      v-model="email"
-    />
+        <div class="mb-3">
+          <label for="password-repeat" class="form-label"
+            >Password Repeat</label
+          >
+          <input
+            id="password-repeat"
+            class="form-control"
+            type="password"
+            v-model="passwordRepeat"
+            placeholder="Password Repeat"
+            data-testid="passwordRepeatInput"
+          />
+        </div>
 
-    <label for="password">Password</label>
-    <input
-      id="password"
-      type="password"
-      v-model="password"
-      placeholder="Password"
-      data-testid="passwordInput"
-    />
-    <label for="password-repeat">Password Repeat</label>
-    <input
-      id="password-repeat"
-      type="password"
-      v-model="passwordRepeat"
-      placeholder="Password Repeat"
-      data-testid="passwordRepeatInput"
-    />
-
-    <button
-      data-testid="submit"
-      :disabled="isButtonDisabled"
-      @click.prevent="handleSignUp"
-    >
-      Sign Up
-    </button>
-  </form>
+        <div class="text-center">
+          <button
+            class="btn btn-outline-primary mt-3"
+            data-testid="submit"
+            :disabled="isButtonDisabled"
+            @click.prevent="handleSignUp"
+          >
+            Sign Up
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </template>
 
 <script>
