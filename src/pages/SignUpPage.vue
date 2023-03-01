@@ -36,9 +36,9 @@
         </div>
 
         <div class="mb-3">
-          <label for="password-repeat" class="form-label"
-            >Password Repeat</label
-          >
+          <label for="password-repeat" class="form-label">
+            Password Repeat
+          </label>
           <input
             id="password-repeat"
             class="form-control"
@@ -70,6 +70,7 @@ export default {
   name: "SignUpPage",
   data() {
     return {
+      isLoading: false,
       username: "",
       email: "",
       password: "",
@@ -79,21 +80,30 @@ export default {
 
   computed: {
     isButtonDisabled() {
-      return !(
-        this.password === this.passwordRepeat &&
-        this.password &&
-        this.passwordRepeat
+      return (
+        !(
+          this.password === this.passwordRepeat &&
+          this.password &&
+          this.passwordRepeat
+        ) || this.isLoading
       );
     },
   },
 
   methods: {
     handleSignUp() {
-      axios.post("/api/1.0/users", {
-        username: this.username,
-        email: this.email,
-        password: this.password,
-      });
+      this.isLoading = true;
+      axios
+        .post("/api/1.0/users", {
+          username: this.username,
+          email: this.email,
+          password: this.password,
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.isLoading = false;
+          }, 1000);
+        });
     },
   },
 };

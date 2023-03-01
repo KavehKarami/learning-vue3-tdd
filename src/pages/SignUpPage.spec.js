@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/vue";
+import { render, screen, waitFor } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 // import axios from "axios";
@@ -112,12 +112,42 @@ describe("Sign Up Page", () => {
       // const body = firstCall[1];
 
       await server.close();
-      
+
       expect(requestBody).toEqual({
         username: "user1",
         email: "user1@gmail.com",
         password: "P@$$word4",
       });
+    });
+    it("does not allow clicking to the button when there is an outgoing api call", async () => {
+      let counter = 0;
+      const server = setupServer(
+        rest.post("/api/1.0/users", async (req, res, ctx) => {
+          counter += 1;
+          return res(ctx.json({ status_code: 200 }));
+        })
+      );
+      server.listen();
+
+      render(SignUpPage);
+      const username = screen.queryByLabelText("Username");
+      const email = screen.queryByTestId("emailInput");
+      const passowrd = screen.queryByTestId("passwordInput");
+      const passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
+      const button = screen.queryByTestId("submit");
+
+      await userEvent.type(passowrd, "P@$$word4");
+      await userEvent.type(passowrdRepeat, "P@$$word4");
+      await userEvent.type(username, "user1");
+      await userEvent.type(email, "user1@gmail.com");
+
+      userEvent.click(button);
+      userEvent.click(button);
+
+      await waitFor(() => {
+        expect(counter).toBe(1);
+      })
+      await server.close();
     });
   });
 });
