@@ -70,6 +70,18 @@ describe("Sign Up Page", () => {
   });
 
   describe("Interactions", () => {
+    const setup = async () => {
+      render(SignUpPage);
+      const username = screen.queryByLabelText("Username");
+      const email = screen.queryByTestId("emailInput");
+      const passowrd = screen.queryByTestId("passwordInput");
+      const passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
+
+      await userEvent.type(passowrd, "P@$$word4");
+      await userEvent.type(passowrdRepeat, "P@$$word4");
+      await userEvent.type(username, "user1");
+      await userEvent.type(email, "user1@gmail.com");
+    };
     it("enables the sign up button when the password and password repeat fields have same value", async () => {
       render(SignUpPage);
       const passowrd = screen.queryByTestId("passwordInput");
@@ -91,17 +103,8 @@ describe("Sign Up Page", () => {
       );
       server.listen();
 
-      render(SignUpPage);
-      const username = screen.queryByLabelText("Username");
-      const email = screen.queryByTestId("emailInput");
-      const passowrd = screen.queryByTestId("passwordInput");
-      const passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
+      setup();
       const button = screen.queryByTestId("submit");
-
-      await userEvent.type(passowrd, "P@$$word4");
-      await userEvent.type(passowrdRepeat, "P@$$word4");
-      await userEvent.type(username, "user1");
-      await userEvent.type(email, "user1@gmail.com");
 
       // const mockFn = jest.fn();
       // axios.post = mockFn;
@@ -129,24 +132,15 @@ describe("Sign Up Page", () => {
       );
       server.listen();
 
-      render(SignUpPage);
-      const username = screen.queryByLabelText("Username");
-      const email = screen.queryByTestId("emailInput");
-      const passowrd = screen.queryByTestId("passwordInput");
-      const passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
+      setup();
       const button = screen.queryByTestId("submit");
-
-      await userEvent.type(passowrd, "P@$$word4");
-      await userEvent.type(passowrdRepeat, "P@$$word4");
-      await userEvent.type(username, "user1");
-      await userEvent.type(email, "user1@gmail.com");
 
       userEvent.click(button);
       userEvent.click(button);
 
       await waitFor(() => {
         expect(counter).toBe(1);
-      })
+      });
       await server.close();
     });
   });
