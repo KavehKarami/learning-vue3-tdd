@@ -138,5 +138,49 @@ describe("Sign Up Page", () => {
       });
       await server.close();
     });
+
+    it("displays spinner while the api request in progress", async () => {
+      const server = setupServer(
+        rest.post("/api/1.0/users", async (req, res, ctx) => {
+          return res(ctx.json({ status_code: 200 }));
+        })
+      );
+      server.listen();
+
+      await setup();
+      const button = screen.queryByTestId("submit");
+
+      userEvent.click(button);
+
+      await waitFor(() => {
+        const spinner = screen.queryByTestId("spinner");
+        expect(spinner).toBeInTheDocument();
+      });
+
+      await server.close();
+    });
+    it("not displays spinner while the api request not in progress", async () => {
+      const server = setupServer(
+        rest.post("/api/1.0/users", async (req, res, ctx) => {
+          return res(ctx.json({ status_code: 200 }));
+        })
+      );
+      server.listen();
+
+      await setup();
+      const button = screen.queryByTestId("submit");
+
+      await userEvent.click(button);
+      const spinner = screen.queryByTestId("spinner");
+
+      expect(spinner).not.toBeInTheDocument();
+
+      await server.close();
+    });
+
+    it("not display spinner when there is no api call", async () => {
+      const spinner = screen.queryByTestId("spinner");
+      expect(spinner).not.toBeInTheDocument();
+    });
   });
 });

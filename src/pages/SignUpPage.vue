@@ -56,6 +56,14 @@
             :disabled="isButtonDisabled"
             @click.prevent="handleSignUp"
           >
+            <div
+              v-if="isLoading"
+              class="spinner-border text-primary spinner-border-sm"
+              role="status"
+              data-testid="spinner"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
             Sign Up
           </button>
         </div>
@@ -100,9 +108,7 @@ export default {
           password: this.password,
         })
         .finally(() => {
-          setTimeout(() => {
-            this.isLoading = false;
-          }, 1000);
+          this.isLoading = false;
         });
     },
   },
