@@ -103,7 +103,7 @@ describe("Sign Up Page", () => {
       );
       server.listen();
 
-      setup();
+      await setup();
       const button = screen.queryByTestId("submit");
 
       // const mockFn = jest.fn();
@@ -132,7 +132,7 @@ describe("Sign Up Page", () => {
       );
       server.listen();
 
-      setup();
+      await setup();
       const button = screen.queryByTestId("submit");
 
       userEvent.click(button);
