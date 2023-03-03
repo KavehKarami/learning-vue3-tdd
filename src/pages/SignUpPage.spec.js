@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/vue";
+import { render, screen, waitFor } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 // import axios from "axios";
@@ -70,14 +70,21 @@ describe("Sign Up Page", () => {
   });
 
   describe("Interactions", () => {
-    it("enables the sign up button when the password and password repeat fields have same value", async () => {
+    const setup = async () => {
       render(SignUpPage);
+      const username = screen.queryByLabelText("Username");
+      const email = screen.queryByTestId("emailInput");
       const passowrd = screen.queryByTestId("passwordInput");
       const passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
-      const button = screen.queryByTestId("submit");
 
       await userEvent.type(passowrd, "P@$$word4");
       await userEvent.type(passowrdRepeat, "P@$$word4");
+      await userEvent.type(username, "user1");
+      await userEvent.type(email, "user1@gmail.com");
+    };
+    it("enables the sign up button when the password and password repeat fields have same value", async () => {
+      await setup();
+      const button = screen.queryByTestId("submit");
 
       expect(button).not.toBeDisabled();
     });
@@ -91,17 +98,8 @@ describe("Sign Up Page", () => {
       );
       server.listen();
 
-      render(SignUpPage);
-      const username = screen.queryByLabelText("Username");
-      const email = screen.queryByTestId("emailInput");
-      const passowrd = screen.queryByTestId("passwordInput");
-      const passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
+      await setup();
       const button = screen.queryByTestId("submit");
-
-      await userEvent.type(passowrd, "P@$$word4");
-      await userEvent.type(passowrdRepeat, "P@$$word4");
-      await userEvent.type(username, "user1");
-      await userEvent.type(email, "user1@gmail.com");
 
       // const mockFn = jest.fn();
       // axios.post = mockFn;
@@ -112,12 +110,77 @@ describe("Sign Up Page", () => {
       // const body = firstCall[1];
 
       await server.close();
-      
+
       expect(requestBody).toEqual({
         username: "user1",
         email: "user1@gmail.com",
         password: "P@$$word4",
       });
+    });
+    it("does not allow clicking to the button when there is an outgoing api call", async () => {
+      let counter = 0;
+      const server = setupServer(
+        rest.post("/api/1.0/users", async (req, res, ctx) => {
+          counter += 1;
+          return res(ctx.json({ status_code: 200 }));
+        })
+      );
+      server.listen();
+
+      await setup();
+      const button = screen.queryByTestId("submit");
+
+      userEvent.click(button);
+      userEvent.click(button);
+
+      await waitFor(() => {
+        expect(counter).toBe(1);
+      });
+      await server.close();
+    });
+
+    it("displays spinner while the api request in progress", async () => {
+      const server = setupServer(
+        rest.post("/api/1.0/users", async (req, res, ctx) => {
+          return res(ctx.json({ status_code: 200 }));
+        })
+      );
+      server.listen();
+
+      await setup();
+      const button = screen.queryByTestId("submit");
+
+      userEvent.click(button);
+
+      await waitFor(() => {
+        const spinner = screen.queryByTestId("spinner");
+        expect(spinner).toBeInTheDocument();
+      });
+
+      await server.close();
+    });
+    it("not displays spinner while the api request not in progress", async () => {
+      const server = setupServer(
+        rest.post("/api/1.0/users", async (req, res, ctx) => {
+          return res(ctx.json({ status_code: 200 }));
+        })
+      );
+      server.listen();
+
+      await setup();
+      const button = screen.queryByTestId("submit");
+
+      await userEvent.click(button);
+      const spinner = screen.queryByTestId("spinner");
+
+      expect(spinner).not.toBeInTheDocument();
+
+      await server.close();
+    });
+
+    it("not display spinner when there is no api call", async () => {
+      const spinner = screen.queryByTestId("spinner");
+      expect(spinner).not.toBeInTheDocument();
     });
   });
 });
