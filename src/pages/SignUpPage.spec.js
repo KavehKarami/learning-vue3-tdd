@@ -83,13 +83,8 @@ describe("Sign Up Page", () => {
       await userEvent.type(email, "user1@gmail.com");
     };
     it("enables the sign up button when the password and password repeat fields have same value", async () => {
-      render(SignUpPage);
-      const passowrd = screen.queryByTestId("passwordInput");
-      const passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
+      await setup();
       const button = screen.queryByTestId("submit");
-
-      await userEvent.type(passowrd, "P@$$word4");
-      await userEvent.type(passowrdRepeat, "P@$$word4");
 
       expect(button).not.toBeDisabled();
     });
