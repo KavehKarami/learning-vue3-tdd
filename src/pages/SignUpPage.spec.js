@@ -221,5 +221,22 @@ describe("Sign Up Page", () => {
       const accountActivation = screen.queryByTestId("account-activation");
       expect(accountActivation).not.toBeInTheDocument();
     });
+    it("hides sign up form after successful sign up request", async () => {
+      const server = setupServer(
+        rest.post("/api/1.0/users", async (req, res, ctx) => {
+          return res(ctx.json({ status_code: 200 }));
+        })
+      );
+      server.listen();
+
+      await setup();
+      const button = screen.queryByTestId("submit");
+
+      await userEvent.click(button);
+
+      await server.close();
+      const signupForm = await screen.queryByTestId("signup-form");
+      expect(signupForm).not.toBeInTheDocument();
+    });
   });
 });

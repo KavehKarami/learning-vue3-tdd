@@ -1,6 +1,7 @@
 <template>
   <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2">
     <div
+      v-if="!isAccountActivation"
       class="mt-5 card"
       data-testid="signup-form"
     >
@@ -72,7 +73,11 @@
         </div>
       </form>
     </div>
-    <div v-if="isAccountActivation" class="alert alert-success" data-testid="account-activation">
+    <div
+      v-else
+      class="mt-5 alert alert-success"
+      data-testid="account-activation"
+    >
       Please Check Your E-mail to active your account
     </div>
   </div>
