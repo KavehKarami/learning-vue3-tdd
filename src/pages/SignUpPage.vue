@@ -1,6 +1,9 @@
 <template>
   <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2">
-    <div class="mt-5 card">
+    <div
+      class="mt-5 card"
+      data-testid="signup-form"
+    >
       <h1 class="card-header text-center">Sign Up Page</h1>
       <form class="card-body">
         <div class="mb-3">
@@ -69,6 +72,9 @@
         </div>
       </form>
     </div>
+    <div v-if="isAccountActivation" class="alert alert-success" data-testid="account-activation">
+      Please Check Your E-mail to active your account
+    </div>
   </div>
 </template>
 
@@ -79,6 +85,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      isAccountActivation: false,
       username: "",
       email: "",
       password: "",
@@ -106,6 +113,12 @@ export default {
           username: this.username,
           email: this.email,
           password: this.password,
+        })
+        .then(() => {
+          this.isAccountActivation = true;
+        })
+        .catch((e) => {
+          console.log(e);
         })
         .finally(() => {
           this.isLoading = false;
