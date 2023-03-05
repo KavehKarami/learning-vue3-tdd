@@ -89,12 +89,14 @@ describe("Sign Up Page", () => {
 
     afterAll(async () => await server.close());
 
+    let button;
     const setup = async () => {
       render(SignUpPage);
       const username = screen.queryByLabelText("Username");
       const email = screen.queryByTestId("emailInput");
       const passowrd = screen.queryByTestId("passwordInput");
       const passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
+      button = screen.queryByTestId("submit");
 
       await userEvent.type(passowrd, "P@$$word4");
       await userEvent.type(passowrdRepeat, "P@$$word4");
@@ -103,13 +105,11 @@ describe("Sign Up Page", () => {
     };
     it("enables the sign up button when the password and password repeat fields have same value", async () => {
       await setup();
-      const button = screen.queryByTestId("submit");
 
       expect(button).not.toBeDisabled();
     });
     it("sends username email and password to backend after clicking the button", async () => {
       await setup();
-      const button = screen.queryByTestId("submit");
 
       // const mockFn = jest.fn();
       // axios.post = mockFn;
@@ -127,7 +127,6 @@ describe("Sign Up Page", () => {
     });
     it("does not allow clicking to the button when there is an outgoing api call", async () => {
       await setup();
-      const button = screen.queryByTestId("submit");
 
       userEvent.click(button);
       userEvent.click(button);
@@ -139,7 +138,6 @@ describe("Sign Up Page", () => {
 
     it("displays spinner while the api request in progress", async () => {
       await setup();
-      const button = screen.queryByTestId("submit");
 
       userEvent.click(button);
 
@@ -150,7 +148,6 @@ describe("Sign Up Page", () => {
     });
     it("not displays spinner while the api request not in progress", async () => {
       await setup();
-      const button = screen.queryByTestId("submit");
 
       await userEvent.click(button);
       const spinner = screen.queryByTestId("spinner");
@@ -165,7 +162,6 @@ describe("Sign Up Page", () => {
 
     it("displays account activation information after successful sign up request", async () => {
       await setup();
-      const button = screen.queryByTestId("submit");
 
       await userEvent.click(button);
 
@@ -184,7 +180,6 @@ describe("Sign Up Page", () => {
       );
 
       await setup();
-      const button = screen.queryByTestId("submit");
 
       await userEvent.click(button);
 
@@ -193,7 +188,6 @@ describe("Sign Up Page", () => {
     });
     it("hides sign up form after successful sign up request", async () => {
       await setup();
-      const button = screen.queryByTestId("submit");
 
       await userEvent.click(button);
 
