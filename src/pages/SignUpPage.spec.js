@@ -84,6 +84,7 @@ describe("Sign Up Page", () => {
 
     beforeEach(() => {
       counter = 0;
+      server.resetHandlers();
     });
 
     afterAll(async () => await server.close());
@@ -175,20 +176,18 @@ describe("Sign Up Page", () => {
       const accountActivation = screen.queryByTestId("account-activation");
       expect(accountActivation).not.toBeInTheDocument();
     });
-    xit("does not displays account activation information after failing sign up request", async () => {
-      const server = setupServer(
+    it("does not displays account activation information after failing sign up request", async () => {
+      server.use(
         rest.post("/api/1.0/users", async (req, res, ctx) => {
           return res(ctx.status(400), ctx.json("error"));
         })
       );
-      server.listen();
 
       await setup();
       const button = screen.queryByTestId("submit");
 
       await userEvent.click(button);
 
-      await server.close();
       const accountActivation = screen.queryByTestId("account-activation");
       expect(accountActivation).not.toBeInTheDocument();
     });
