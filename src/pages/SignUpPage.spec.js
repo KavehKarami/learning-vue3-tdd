@@ -175,7 +175,7 @@ describe("Sign Up Page", () => {
     it("does not displays account activation information after failing sign up request", async () => {
       server.use(
         rest.post("/api/1.0/users", async (req, res, ctx) => {
-          return res(ctx.status(400), ctx.json("error"));
+          return res(ctx.status(400), ctx.json({ validationErrors: {} }));
         })
       );
 
@@ -193,6 +193,27 @@ describe("Sign Up Page", () => {
 
       const signupForm = await screen.queryByTestId("signup-form");
       expect(signupForm).not.toBeInTheDocument();
+    });
+    it("displays validation messages for username", async () => {
+      server.use(
+        rest.post("/api/1.0/users", async (req, res, ctx) => {
+          return res(
+            ctx.status(400),
+            ctx.json({
+              validationErrors: {
+                username: "Username cannot be null",
+              },
+            })
+          );
+        })
+      );
+
+      await setup();
+
+      await userEvent.click(button);
+
+      const invalidUsername = await screen.findByTestId("invalid-username");
+      expect(invalidUsername).toBeInTheDocument();
     });
   });
 });

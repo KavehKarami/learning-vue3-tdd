@@ -15,6 +15,9 @@
             placeholder="username"
             v-model="username"
           />
+          <span v-if="errors.username" data-testid="invalid-username">{{
+            errors.username
+          }}</span>
         </div>
         <div class="mb-3">
           <label for="email" class="form-label">E-mail</label>
@@ -95,6 +98,7 @@ export default {
       email: "",
       password: "",
       passwordRepeat: "",
+      errors: {},
     };
   },
 
@@ -123,7 +127,8 @@ export default {
           this.isAccountActivation = true;
         })
         .catch((e) => {
-          console.log(e);
+          if (e.response.status === 400)
+            this.errors = e.response.data.validationErrors;
         })
         .finally(() => {
           this.isLoading = false;
