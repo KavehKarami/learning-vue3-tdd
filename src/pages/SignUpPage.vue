@@ -7,54 +7,41 @@
     >
       <h1 class="card-header text-center">Sign Up Page</h1>
       <form class="card-body">
-        <div class="mb-3">
-          <label for="username" class="form-label">Username</label>
-          <input
-            id="username"
-            class="form-control"
-            placeholder="username"
-            v-model="username"
-          />
-          <span v-if="errors.username" data-testid="invalid-username">{{
-            errors.username
-          }}</span>
-        </div>
-        <div class="mb-3">
-          <label for="email" class="form-label">E-mail</label>
-          <input
-            id="email"
-            class="form-control"
-            placeholder="email"
-            data-testid="emailInput"
-            v-model="email"
-          />
-        </div>
+        <base-input
+          id="username"
+          title="Username"
+          placeholder="username"
+          data-testid="username"
+          help-test-id="invalid-username"
+          :help="errors.username"
+          v-model="username"
+        />
 
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input
-            id="password"
-            type="password"
-            class="form-control"
-            v-model="password"
-            placeholder="Password"
-            data-testid="passwordInput"
-          />
-        </div>
+        <base-input
+          id="email"
+          title="E-mail"
+          placeholder="email"
+          data-testid="emailInput"
+          v-model="email"
+        />
 
-        <div class="mb-3">
-          <label for="password-repeat" class="form-label">
-            Password Repeat
-          </label>
-          <input
-            id="password-repeat"
-            class="form-control"
-            type="password"
-            v-model="passwordRepeat"
-            placeholder="Password Repeat"
-            data-testid="passwordRepeatInput"
-          />
-        </div>
+        <base-input
+          id="password"
+          title="Password"
+          type="password"
+          placeholder="Password"
+          data-testid="passwordInput"
+          v-model="password"
+        />
+
+        <base-input
+          id="password-repeat"
+          title="Password Repeat"
+          type="password"
+          placeholder="Password Repeat"
+          data-testid="passwordRepeatInput"
+          v-model="passwordRepeat"
+        />
 
         <div class="text-center">
           <button
@@ -88,8 +75,10 @@
 
 <script>
 import axios from "axios";
+import BaseInput from "../components/BaseInput.vue";
 export default {
   name: "SignUpPage",
+  components: { BaseInput },
   data() {
     return {
       isLoading: false,
