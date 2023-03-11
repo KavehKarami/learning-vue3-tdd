@@ -22,6 +22,8 @@
           title="E-mail"
           placeholder="email"
           data-testid="emailInput"
+          help-test-id="invalid-email"
+          :help="errors.email"
           v-model="email"
         />
 
@@ -31,6 +33,8 @@
           type="password"
           placeholder="Password"
           data-testid="passwordInput"
+          help-test-id="invalid-password"
+          :help="errors.password"
           v-model="password"
         />
 
