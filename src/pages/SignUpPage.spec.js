@@ -194,14 +194,19 @@ describe("Sign Up Page", () => {
       const signupForm = await screen.queryByTestId("signup-form");
       expect(signupForm).not.toBeInTheDocument();
     });
-    it("displays validation messages for username", async () => {
+    it.each`
+      field         | message
+      ${"password"} | ${"password error"}
+      ${"username"} | ${"username error"}
+      ${"email"}    | ${"email error"}
+    `("displays $message for $field", async ({ field, message }) => {
       server.use(
         rest.post("/api/1.0/users", async (req, res, ctx) => {
           return res(
             ctx.status(400),
             ctx.json({
               validationErrors: {
-                username: "Username cannot be null",
+                [field]: message,
               },
             })
           );
@@ -212,8 +217,8 @@ describe("Sign Up Page", () => {
 
       await userEvent.click(button);
 
-      const invalidUsername = await screen.findByTestId("invalid-username");
-      expect(invalidUsername).toBeInTheDocument();
+      const input = await screen.findByTestId(`invalid-${field}`);
+      expect(input).toBeInTheDocument();
     });
   });
 });
