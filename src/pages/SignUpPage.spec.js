@@ -103,6 +103,20 @@ describe("Sign Up Page", () => {
       await userEvent.type(username, "user1");
       await userEvent.type(email, "user1@gmail.com");
     };
+
+    const generateValidationError = (field, message) => {
+      return rest.post("/api/1.0/users", async (req, res, ctx) => {
+        return res(
+          ctx.status(400),
+          ctx.json({
+            validationErrors: {
+              [field]: message,
+            },
+          })
+        );
+      });
+    };
+
     it("enables the sign up button when the password and password repeat fields have same value", async () => {
       await setup();
 
@@ -174,9 +188,7 @@ describe("Sign Up Page", () => {
     });
     it("does not displays account activation information after failing sign up request", async () => {
       server.use(
-        rest.post("/api/1.0/users", async (req, res, ctx) => {
-          return res(ctx.status(400), ctx.json({ validationErrors: {} }));
-        })
+        generateValidationError("username", "username cannot be null")
       );
 
       await setup();
@@ -200,18 +212,7 @@ describe("Sign Up Page", () => {
       ${"username"} | ${"username error"}
       ${"email"}    | ${"email error"}
     `("displays $message for $field", async ({ field, message }) => {
-      server.use(
-        rest.post("/api/1.0/users", async (req, res, ctx) => {
-          return res(
-            ctx.status(400),
-            ctx.json({
-              validationErrors: {
-                [field]: message,
-              },
-            })
-          );
-        })
-      );
+      server.use(generateValidationError(field, message));
 
       await setup();
 
