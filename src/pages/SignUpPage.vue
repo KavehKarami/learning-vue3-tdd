@@ -44,6 +44,10 @@
           type="password"
           placeholder="Password Repeat"
           data-testid="passwordRepeatInput"
+          help-test-id="invalid-repeat-password"
+          :help="
+            this.password !== this.passwordRepeat ? 'Password mismatch' : ''
+          "
           v-model="passwordRepeat"
         />
 
