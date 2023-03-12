@@ -89,13 +89,13 @@ describe("Sign Up Page", () => {
 
     afterAll(async () => await server.close());
 
-    let button;
+    let button, passowrd, passowrdRepeat;
     const setup = async () => {
       render(SignUpPage);
       const username = screen.queryByLabelText("Username");
       const email = screen.queryByTestId("emailInput");
-      const passowrd = screen.queryByTestId("passwordInput");
-      const passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
+      passowrd = screen.queryByTestId("passwordInput");
+      passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
       button = screen.queryByTestId("submit");
 
       await userEvent.type(passowrd, "P@$$word4");
@@ -220,6 +220,15 @@ describe("Sign Up Page", () => {
 
       const input = await screen.findByTestId(`invalid-${field}`);
       expect(input).toBeInTheDocument();
+    });
+    it("displays mismatch message for password repeat input", async () => {
+      await setup();
+      await userEvent.type(passowrd, "P@word4");
+      await userEvent.type(passowrdRepeat, "P@$$word4");
+
+      const inputError = await screen.findByTestId('invalid-repeat-password')
+
+      expect(inputError).toBeInTheDocument();
     });
   });
 });
