@@ -89,10 +89,10 @@ describe("Sign Up Page", () => {
 
     afterAll(async () => await server.close());
 
-    let button, passowrd, passowrdRepeat;
+    let button, passowrd, passowrdRepeat, username;
     const setup = async () => {
       render(SignUpPage);
-      const username = screen.queryByLabelText("Username");
+      username = screen.queryByTestId("usernameInput");
       const email = screen.queryByTestId("emailInput");
       passowrd = screen.queryByTestId("passwordInput");
       passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
@@ -226,9 +226,29 @@ describe("Sign Up Page", () => {
       await userEvent.type(passowrd, "P@word4");
       await userEvent.type(passowrdRepeat, "P@$$word4");
 
-      const inputError = await screen.findByTestId('invalid-repeat-password')
+      const inputError = await screen.findByTestId("invalid-repeat-password");
 
       expect(inputError).toBeInTheDocument();
     });
+
+    it.each`
+      field         | message
+      ${"password"} | ${"password error"}
+      ${"username"} | ${"username error"}
+      ${"email"}    | ${"email error"}
+    `(
+      "clears validation error after $field field is updated",
+      async ({ field, message }) => {
+        server.use(generateValidationError(field, message));
+        await setup();
+        await userEvent.click(button);
+        const inputError = await screen.findByTestId(`invalid-${field}`);
+
+        const input = screen.queryByTestId(`${field}Input`);
+        await userEvent.type(input, "updated!");
+
+        expect(inputError).not.toBeInTheDocument();
+      }
+    );
   });
 });
