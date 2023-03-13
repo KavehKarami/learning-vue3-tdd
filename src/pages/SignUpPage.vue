@@ -11,7 +11,7 @@
           id="username"
           title="Username"
           placeholder="username"
-          data-testid="username"
+          data-testid="usernameInput"
           help-test-id="invalid-username"
           :help="errors.username"
           v-model="username"
@@ -108,6 +108,18 @@ export default {
           this.passwordRepeat
         ) || this.isLoading
       );
+    },
+  },
+
+  watch: {
+    username() {
+      if (this.errors.username) delete this.errors.username;
+    },
+    email() {
+      if (this.errors.email) delete this.errors.email;
+    },
+    password() {
+      if (this.errors.password) delete this.errors.password;
     },
   },
 
