@@ -5,12 +5,12 @@
       class="mt-5 card"
       data-testid="signup-form"
     >
-      <h1 class="card-header text-center">Sign Up Page</h1>
+      <h1 class="card-header text-center">{{ $t("signUp") }}</h1>
       <form class="card-body">
         <base-input
           id="username"
-          title="Username"
-          placeholder="username"
+          :title="$t('username')"
+          :placeholder="$t('username')"
           data-testid="usernameInput"
           help-test-id="invalid-username"
           :help="errors.username"
@@ -19,8 +19,8 @@
 
         <base-input
           id="email"
-          title="E-mail"
-          placeholder="email"
+          :title="$t('email')"
+          :placeholder="$t('email')"
           data-testid="emailInput"
           help-test-id="invalid-email"
           :help="errors.email"
@@ -29,9 +29,9 @@
 
         <base-input
           id="password"
-          title="Password"
+          :title="$t('password')"
           type="password"
-          placeholder="Password"
+          :placeholder="$t('password')"
           data-testid="passwordInput"
           help-test-id="invalid-password"
           :help="errors.password"
@@ -40,9 +40,9 @@
 
         <base-input
           id="password-repeat"
-          title="Password Repeat"
+          :title="$t('passwordRepeat')"
           type="password"
-          placeholder="Password Repeat"
+          :placeholder="$t('passwordRepeat')"
           data-testid="passwordRepeatInput"
           help-test-id="invalid-repeat-password"
           :help="

@@ -5,6 +5,7 @@ import "@testing-library/jest-dom";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 import SignUpPage from "./SignUpPage.vue";
+import i18n from "../locales/i18n";
 
 /**
  * REVIEW:
@@ -16,54 +17,57 @@ import SignUpPage from "./SignUpPage.vue";
  */
 
 describe("Sign Up Page", () => {
+  const setup = () => {
+    render(SignUpPage, { global: { plugins: [i18n] } });
+  };
   describe("Layout", () => {
     it("has signup header", () => {
-      render(SignUpPage);
-      const header = screen.queryByRole("heading", { name: "Sign Up Page" });
+      setup();
+      const header = screen.queryByRole("heading", { name: "Sign Up" });
 
       expect(header).toBeInTheDocument();
     });
 
     it("has username input", () => {
-      render(SignUpPage);
+      setup();
       const input = screen.queryByLabelText("Username");
       expect(input).toBeInTheDocument();
     });
     it("has email input", () => {
-      render(SignUpPage);
+      setup();
       const input = screen.queryByTestId("emailInput");
       expect(input).toBeInTheDocument();
     });
     it("has password input", () => {
-      render(SignUpPage);
+      setup();
       const input = screen.queryByTestId("passwordInput");
       expect(input).toBeInTheDocument();
     });
     it("has passowrd type for passowrd input", () => {
-      render(SignUpPage);
+      setup();
       const input = screen.queryByTestId("passwordInput");
       expect(input).toHaveAttribute("type", "password");
     });
 
     it("has password repeat input", () => {
-      render(SignUpPage);
+      setup();
       const input = screen.queryByTestId("passwordRepeatInput");
       expect(input).toBeInTheDocument();
     });
     it("has passowrd type for passowrd repeat input", () => {
-      render(SignUpPage);
+      setup();
       const input = screen.queryByTestId("passwordRepeatInput");
       expect(input).toHaveAttribute("type", "password");
     });
 
     it("has sign up button", () => {
-      render(SignUpPage);
+      setup();
       const button = screen.queryByTestId("submit");
       expect(button).toBeInTheDocument();
     });
 
     it("has disabled button initially", () => {
-      render(SignUpPage);
+      setup();
       const button = screen.queryByTestId("submit");
       expect(button).toBeDisabled();
     });
@@ -91,7 +95,7 @@ describe("Sign Up Page", () => {
 
     let button, passowrd, passowrdRepeat, username;
     const setup = async () => {
-      render(SignUpPage);
+      render(SignUpPage, { global: { plugins: [i18n] } });
       username = screen.queryByTestId("usernameInput");
       const email = screen.queryByTestId("emailInput");
       passowrd = screen.queryByTestId("passwordInput");
