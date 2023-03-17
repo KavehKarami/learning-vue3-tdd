@@ -255,4 +255,35 @@ describe("Sign Up Page", () => {
       }
     );
   });
+
+  describe("Internationalization", () => {
+    const setup = () => {
+      render(SignUpPage, { global: { plugins: [i18n] } });
+    };
+    afterEach(() => {
+      i18n.global.locale = "en";
+    });
+
+    it("initially displays all text in english", async () => {
+      setup();
+      expect(i18n.global.locale).toBe("en");
+    });
+
+    it("displays all text in persian after selecting that language", async () => {
+      setup();
+
+      const persianLanguage = screen.queryByTestId("persian-lang");
+      await userEvent.click(persianLanguage);
+      expect(i18n.global.locale).toBe("fa");
+    });
+    it("displays all text in English after selecting that language when language page is persian", async () => {
+      const persianLanguage = screen.queryByTestId("persian-lang");
+      const englishLanguage = screen.queryByTestId("english-lang");
+
+      await userEvent.click(persianLanguage);
+      await userEvent.click(englishLanguage);
+
+      expect(i18n.global.locale).toBe("en");
+    });
+  });
 });
