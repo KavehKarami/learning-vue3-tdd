@@ -5,6 +5,7 @@ import "@testing-library/jest-dom";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 import SignUpPage from "./SignUpPage.vue";
+import LanguageSelector from "../components/LanguageSelector.vue";
 import i18n from "../locales/i18n";
 
 /**
@@ -257,9 +258,22 @@ describe("Sign Up Page", () => {
   });
 
   describe("Internationalization", () => {
+    let persianLanguage, englishLanguage;
     const setup = () => {
-      render(SignUpPage, { global: { plugins: [i18n] } });
+      const app = {
+        name: "App",
+        components: {
+          SignUpPage,
+          LanguageSelector,
+        },
+        template: `<sign-up-page /><language-selector />`,
+      };
+      render(app, { global: { plugins: [i18n] } });
+
+      persianLanguage = screen.queryByTestId("persianLang");
+      englishLanguage = screen.queryByTestId("englishLang");
     };
+
     afterEach(() => {
       i18n.global.locale = "en";
     });
@@ -272,13 +286,12 @@ describe("Sign Up Page", () => {
     it("displays all text in persian after selecting that language", async () => {
       setup();
 
-      const persianLanguage = screen.queryByTestId("persian-lang");
       await userEvent.click(persianLanguage);
+
       expect(i18n.global.locale).toBe("fa");
     });
     it("displays all text in English after selecting that language when language page is persian", async () => {
-      const persianLanguage = screen.queryByTestId("persian-lang");
-      const englishLanguage = screen.queryByTestId("english-lang");
+      setup();
 
       await userEvent.click(persianLanguage);
       await userEvent.click(englishLanguage);
