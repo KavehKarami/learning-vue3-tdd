@@ -1,7 +1,9 @@
 {
-  "signUp": "Sign Up",
+  "sign_up": "Sign Up",
   "username": "Username",
   "email": "E-mail",
   "password": "Password",
-  "passwordRepeat": "Password Repeat"
+  "password_repeat": "Password Repeat",
+  "password_mismatch": "Password mismatch",
+  "successful_sign_up": "Please Check Your E-mail to active your account"
 }
