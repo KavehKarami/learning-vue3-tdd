@@ -260,7 +260,7 @@ describe("Sign Up Page", () => {
   });
 
   describe("Internationalization", () => {
-    let persianLanguage, englishLanguage;
+    let persianLanguage, englishLanguage, passowrd, passowrdRepeat;
     const setup = () => {
       const app = {
         name: "App",
@@ -274,6 +274,8 @@ describe("Sign Up Page", () => {
 
       persianLanguage = screen.queryByTestId("persianLang");
       englishLanguage = screen.queryByTestId("englishLang");
+      passowrd = screen.queryByTestId("passwordInput");
+      passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
     };
 
     afterEach(() => {
@@ -320,6 +322,17 @@ describe("Sign Up Page", () => {
       ).toBeInTheDocument();
       expect(screen.queryByLabelText(en.email)).toBeInTheDocument();
       expect(screen.queryByLabelText(en.password)).toBeInTheDocument();
+    });
+
+    it("displays password mismatch validation in Persian", async () => {
+      setup();
+      await userEvent.click(persianLanguage);
+      await userEvent.type(passowrd, "password");
+      await userEvent.type(passowrdRepeat, "pas$word");
+
+      const inputError = await screen.findByTestId("invalid-repeat-password");
+
+      expect(inputError).toHaveTextContent(fa.password_mismatch);
     });
   });
 });

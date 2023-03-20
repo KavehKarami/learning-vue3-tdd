@@ -1,7 +1,9 @@
 {
-  "signUp": "ثبت‌نام",
+  "sign_up": "ثبت‌نام",
   "username": "نام‌کاربری",
   "email": "ایمیل",
   "password": "رمز عبور",
-  "passwordRepeat": "تکرار رمز عبور"
+  "password_repeat": "تکرار رمز عبور",
+  "password_mismatch": "رمز عبور یکسان نیست",
+  "successful_sign_up": "لطفا ایمیل خود را برای فعال‌سازی اکانت چک کنید"
 }
