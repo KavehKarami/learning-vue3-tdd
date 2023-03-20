@@ -5,7 +5,7 @@
       class="mt-5 card"
       data-testid="signup-form"
     >
-      <h1 class="card-header text-center">{{ $t("signUp") }}</h1>
+      <h1 class="card-header text-center">{{ $t("sign_up") }}</h1>
       <form class="card-body">
         <base-input
           id="username"
@@ -40,13 +40,13 @@
 
         <base-input
           id="password-repeat"
-          :title="$t('passwordRepeat')"
+          :title="$t('password_repeat')"
           type="password"
-          :placeholder="$t('passwordRepeat')"
+          :placeholder="$t('password_repeat')"
           data-testid="passwordRepeatInput"
           help-test-id="invalid-repeat-password"
           :help="
-            this.password !== this.passwordRepeat ? 'Password mismatch' : ''
+            this.password !== this.passwordRepeat ? $t('password_mismatch') : ''
           "
           v-model="passwordRepeat"
         />
@@ -66,7 +66,7 @@
             >
               <span class="visually-hidden">Loading...</span>
             </div>
-            {{ $t("signUp") }}
+            {{ $t("sign_up") }}
           </button>
         </div>
       </form>
@@ -76,7 +76,7 @@
       class="mt-5 alert alert-success"
       data-testid="account-activation"
     >
-      Please Check Your E-mail to active your account
+      {{ $t("successful_sign_up") }}
     </div>
   </div>
 </template>
