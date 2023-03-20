@@ -7,6 +7,8 @@ import { rest } from "msw";
 import SignUpPage from "./SignUpPage.vue";
 import LanguageSelector from "../components/LanguageSelector.vue";
 import i18n from "../locales/i18n";
+import en from "../locales/en.json";
+import fa from "../locales/fa.json";
 
 /**
  * REVIEW:
@@ -280,7 +282,14 @@ describe("Sign Up Page", () => {
 
     it("initially displays all text in english", async () => {
       setup();
-      expect(i18n.global.locale).toBe("en");
+      expect(
+        screen.queryByRole("heading", { name: en.signUp })
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: en.signUp })
+      ).toBeInTheDocument();
+      expect(screen.queryByLabelText(en.email)).toBeInTheDocument();
+      expect(screen.queryByLabelText(en.password)).toBeInTheDocument();
     });
 
     it("displays all text in persian after selecting that language", async () => {
@@ -288,7 +297,14 @@ describe("Sign Up Page", () => {
 
       await userEvent.click(persianLanguage);
 
-      expect(i18n.global.locale).toBe("fa");
+      expect(
+        screen.queryByRole("heading", { name: fa.signUp })
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: fa.signUp })
+      ).toBeInTheDocument();
+      expect(screen.queryByLabelText(fa.email)).toBeInTheDocument();
+      expect(screen.queryByLabelText(fa.password)).toBeInTheDocument();
     });
     it("displays all text in English after selecting that language when language page is persian", async () => {
       setup();
@@ -296,7 +312,14 @@ describe("Sign Up Page", () => {
       await userEvent.click(persianLanguage);
       await userEvent.click(englishLanguage);
 
-      expect(i18n.global.locale).toBe("en");
+      expect(
+        screen.queryByRole("heading", { name: en.signUp })
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: en.signUp })
+      ).toBeInTheDocument();
+      expect(screen.queryByLabelText(en.email)).toBeInTheDocument();
+      expect(screen.queryByLabelText(en.password)).toBeInTheDocument();
     });
   });
 });

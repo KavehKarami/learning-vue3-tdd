@@ -66,7 +66,7 @@
             >
               <span class="visually-hidden">Loading...</span>
             </div>
-            Sign Up
+            {{ $t("signUp") }}
           </button>
         </div>
       </form>
