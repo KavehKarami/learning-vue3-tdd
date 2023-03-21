@@ -1,6 +1,5 @@
 <template>
   <div class="mt-2">
-    {{ $i18n.locale }}
     <span
       class="me-3"
       data-testid="englishLang"
