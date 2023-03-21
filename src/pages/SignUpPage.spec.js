@@ -19,6 +19,40 @@ import fa from "../locales/fa.json";
  * so it's better to use `msw` library to mock api call, `npm i -D msw`
  */
 
+let requestBody;
+let acceptLanguageHeader;
+let counter = 0;
+const server = setupServer(
+  rest.post("/api/1.0/users", async (req, res, ctx) => {
+    counter += 1;
+    requestBody = await req.json();
+    acceptLanguageHeader = req.headers.get("Accept-Language");
+    return res(ctx.json({ status_code: 200 }));
+  })
+);
+
+beforeAll(() => server.listen());
+
+beforeEach(() => {
+  counter = 0;
+  server.resetHandlers();
+});
+
+const generateValidationError = (field, message) => {
+  return rest.post("/api/1.0/users", async (req, res, ctx) => {
+    return res(
+      ctx.status(400),
+      ctx.json({
+        validationErrors: {
+          [field]: message,
+        },
+      })
+    );
+  });
+};
+
+afterAll(async () => await server.close());
+
 describe("Sign Up Page", () => {
   const setup = () => {
     render(SignUpPage, { global: { plugins: [i18n] } });
@@ -77,25 +111,6 @@ describe("Sign Up Page", () => {
   });
 
   describe("Interactions", () => {
-    let requestBody;
-    let counter = 0;
-    const server = setupServer(
-      rest.post("/api/1.0/users", async (req, res, ctx) => {
-        counter += 1;
-        requestBody = await req.json();
-        return res(ctx.json({ status_code: 200 }));
-      })
-    );
-
-    beforeAll(() => server.listen());
-
-    beforeEach(() => {
-      counter = 0;
-      server.resetHandlers();
-    });
-
-    afterAll(async () => await server.close());
-
     let button, passowrd, passowrdRepeat, username;
     const setup = async () => {
       render(SignUpPage, { global: { plugins: [i18n] } });
@@ -109,19 +124,6 @@ describe("Sign Up Page", () => {
       await userEvent.type(passowrdRepeat, "P@$$word4");
       await userEvent.type(username, "user1");
       await userEvent.type(email, "user1@gmail.com");
-    };
-
-    const generateValidationError = (field, message) => {
-      return rest.post("/api/1.0/users", async (req, res, ctx) => {
-        return res(
-          ctx.status(400),
-          ctx.json({
-            validationErrors: {
-              [field]: message,
-            },
-          })
-        );
-      });
     };
 
     it("enables the sign up button when the password and password repeat fields have same value", async () => {
@@ -260,7 +262,13 @@ describe("Sign Up Page", () => {
   });
 
   describe("Internationalization", () => {
-    let persianLanguage, englishLanguage, passowrd, passowrdRepeat;
+    let persianLanguage,
+      englishLanguage,
+      passowrd,
+      passowrdRepeat,
+      button,
+      username,
+      email;
     const setup = () => {
       const app = {
         name: "App",
@@ -274,8 +282,11 @@ describe("Sign Up Page", () => {
 
       persianLanguage = screen.queryByTestId("persianLang");
       englishLanguage = screen.queryByTestId("englishLang");
+      username = screen.queryByTestId("usernameInput");
+      email = screen.queryByTestId("emailInput");
       passowrd = screen.queryByTestId("passwordInput");
       passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
+      button = screen.queryByTestId("submit");
     };
 
     afterEach(() => {
@@ -333,6 +344,27 @@ describe("Sign Up Page", () => {
       const inputError = await screen.findByTestId("invalid-repeat-password");
 
       expect(inputError).toHaveTextContent(fa.password_mismatch);
+    });
+    it("sends accept-language header having en to backend for signup request", async () => {
+      setup();
+      await userEvent.type(username, "user1");
+      await userEvent.type(email, "user1@gmail.com");
+      await userEvent.type(passowrdRepeat, "P@$$word4");
+      await userEvent.type(passowrd, "P@$$word4");
+      await userEvent.click(button);
+
+      expect(acceptLanguageHeader).toBe("en");
+    });
+    it("sends accept-language header having fa after that language", async () => {
+      setup();
+      await userEvent.click(persianLanguage);
+      await userEvent.type(username, "user1");
+      await userEvent.type(email, "user1@gmail.com");
+      await userEvent.type(passowrdRepeat, "P@$$word4");
+      await userEvent.type(passowrd, "P@$$word4");
+      await userEvent.click(button);
+
+      expect(acceptLanguageHeader).toBe("fa");
     });
   });
 });
