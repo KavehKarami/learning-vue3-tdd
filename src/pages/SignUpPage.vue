@@ -126,12 +126,21 @@ export default {
   methods: {
     handleSignUp() {
       this.isLoading = true;
+
       axios
-        .post("/api/1.0/users", {
-          username: this.username,
-          email: this.email,
-          password: this.password,
-        })
+        .post(
+          "/api/1.0/users",
+          {
+            username: this.username,
+            email: this.email,
+            password: this.password,
+          },
+          {
+            headers: {
+              "Accept-Language": this.$i18n.locale,
+            },
+          }
+        )
         .then(() => {
           this.isAccountActivation = true;
         })
