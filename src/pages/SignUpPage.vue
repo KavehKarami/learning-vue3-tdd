@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import services from "../api/api";
 import BaseInput from "../components/BaseInput.vue";
 export default {
   name: "SignUpPage",
@@ -127,20 +127,12 @@ export default {
     handleSignUp() {
       this.isLoading = true;
 
-      axios
-        .post(
-          "/api/1.0/users",
-          {
-            username: this.username,
-            email: this.email,
-            password: this.password,
-          },
-          {
-            headers: {
-              "Accept-Language": this.$i18n.locale,
-            },
-          }
-        )
+      services
+        .signup({
+          username: this.username,
+          email: this.email,
+          password: this.password,
+        })
         .then(() => {
           this.isAccountActivation = true;
         })
