@@ -8,4 +8,5 @@ module.exports = {
     customExportConditions: ["node", "node-addons"],
   },
   moduleFileExtensions: ["js", "vue", "json"],
+  setupFilesAfterEnv: ["./test/setupTest.js"],
 };

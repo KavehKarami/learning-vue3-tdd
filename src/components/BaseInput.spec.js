@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/vue";
-import "@testing-library/jest-dom";
 import BaseInput from "./BaseInput.vue";
 
 describe("BaseInput", () => {

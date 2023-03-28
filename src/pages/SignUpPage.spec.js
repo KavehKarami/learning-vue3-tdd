@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import "@testing-library/jest-dom";
 // import axios from "axios";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
@@ -288,10 +287,6 @@ describe("Sign Up Page", () => {
       passowrdRepeat = screen.queryByTestId("passwordRepeatInput");
       button = screen.queryByTestId("submit");
     };
-
-    afterEach(() => {
-      i18n.global.locale = "en";
-    });
 
     it("initially displays all text in english", async () => {
       setup();
