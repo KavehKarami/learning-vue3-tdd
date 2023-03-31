@@ -1,18 +1,50 @@
 <template>
+  <div class="shadow-sm bg-light">
+    <nav class="navbar navbar-expand">
+      <div class="container">
+        <a
+          class="navbar-brand"
+          href="/"
+          data-testid="homepage-nav-link"
+          @click.prevent="onClickLink"
+        >
+          <img
+            src="./assets/hoaxify.png"
+            width="60"
+            alt="Hoaxify Logo"
+            data-testid="brand-logo"
+          />
+
+          Hoaxify
+        </a>
+
+        <ul class="navbar-nav ms-auto">
+          <li>
+            <a
+              class="nav-link"
+              href="/signup"
+              data-testid="signup-nav-link"
+              @click.prevent="onClickLink"
+            >
+              {{ $t("sign_up") }}
+            </a>
+          </li>
+          <li>
+            <a
+              class="nav-link"
+              href="/login"
+              data-testid="login-nav-link"
+              @click.prevent="onClickLink"
+            >
+              {{ $t("login") }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
   <div class="container">
-    <a href="/" data-testid="homepage-nav-link" @click.prevent="onClickLink">
-      Hoaxify
-    </a>
-    <a
-      href="/signup"
-      data-testid="signup-nav-link"
-      @click.prevent="onClickLink"
-    >
-      {{ $t("sign_up") }}
-    </a>
-    <a href="/login" data-testid="login-nav-link" @click.prevent="onClickLink">
-      {{ $t("login") }}
-    </a>
     <home-page v-if="pathname === '/'" />
     <sign-up-page v-else-if="pathname === '/signup'" />
     <login-page v-else-if="pathname === '/login'" />
@@ -46,7 +78,7 @@ export default {
 
   methods: {
     onClickLink(event) {
-      this.pathname = event.target.attributes.href.value;
+      this.pathname = event.currentTarget.attributes.href.value;
       window.history.pushState({}, "", this.pathname);
     },
   },

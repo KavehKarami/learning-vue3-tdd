@@ -41,6 +41,14 @@ describe("Routing", () => {
     const page = screen.queryByTestId(pageTestId);
     expect(page).not.toBeInTheDocument();
   });
+
+  it("display home page when clicking brand logo", async () => {
+    setup("/login");
+    const brandLogo = screen.queryByTestId("brand-logo");
+    await userEvent.click(brandLogo);
+    const page = screen.queryByTestId("home-page");
+    expect(page).toBeInTheDocument();
+  });
 });
 
 describe.each`
