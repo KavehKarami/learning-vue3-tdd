@@ -2,11 +2,10 @@
   <div class="shadow-sm bg-light">
     <nav class="navbar navbar-expand">
       <div class="container">
-        <a
+        <router-link
           class="navbar-brand"
-          href="/"
+          to="/"
           data-testid="homepage-nav-link"
-          @click.prevent="onClickLink"
         >
           <img
             src="./assets/hoaxify.png"
@@ -16,28 +15,26 @@
           />
 
           Hoaxify
-        </a>
+        </router-link>
 
         <ul class="navbar-nav ms-auto">
           <li>
-            <a
+            <router-link
               class="nav-link"
-              href="/signup"
+              to="/signup"
               data-testid="signup-nav-link"
-              @click.prevent="onClickLink"
             >
               {{ $t("sign_up") }}
-            </a>
+            </router-link>
           </li>
           <li>
-            <a
+            <router-link
               class="nav-link"
-              href="/login"
+              to="/login"
               data-testid="login-nav-link"
-              @click.prevent="onClickLink"
             >
               {{ $t("login") }}
-            </a>
+            </router-link>
           </li>
         </ul>
       </div>
@@ -45,42 +42,18 @@
   </div>
 
   <div class="container">
-    <home-page v-if="pathname === '/'" />
-    <sign-up-page v-else-if="pathname === '/signup'" />
-    <login-page v-else-if="pathname === '/login'" />
-    <user-page v-else-if="pathname.startsWith('/user')" />
+    <router-view />
     <language-selector />
   </div>
 </template>
 
 <script>
-import SignUpPage from "./pages/SignUpPage.vue";
-import HomePage from "./pages/HomePage.vue";
-import LoginPage from "./pages/LoginPage.vue";
-import UserPage from "./pages/UserPage.vue";
 import LanguageSelector from "./components/LanguageSelector.vue";
 
 export default {
   name: "App",
   components: {
-    SignUpPage,
     LanguageSelector,
-    HomePage,
-    LoginPage,
-    UserPage,
-  },
-
-  data() {
-    return {
-      pathname: window.location.pathname,
-    };
-  },
-
-  methods: {
-    onClickLink(event) {
-      this.pathname = event.currentTarget.attributes.href.value;
-      window.history.pushState({}, "", this.pathname);
-    },
   },
 };
 </script>
