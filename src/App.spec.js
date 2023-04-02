@@ -26,19 +26,27 @@ describe("Routing", () => {
   });
 
   it.each`
-    path         | pageTestId
-    ${"/"}       | ${"signup-page"}
-    ${"/"}       | ${"login-page"}
-    ${"/"}       | ${"user-page"}
-    ${"/login"}  | ${"home-page"}
-    ${"/login"}  | ${"signup-page"}
-    ${"/login"}  | ${"user-page"}
-    ${"/signup"} | ${"login-page"}
-    ${"/signup"} | ${"home-page"}
-    ${"/signup"} | ${"user-page"}
-    ${"/user/1"} | ${"signup-page"}
-    ${"/user/1"} | ${"login-page"}
-    ${"/user/1"} | ${"home-page"}
+    path               | pageTestId
+    ${"/"}             | ${"signup-page"}
+    ${"/"}             | ${"login-page"}
+    ${"/"}             | ${"user-page"}
+    ${"/"}             | ${"activation-page"}
+    ${"/login"}        | ${"home-page"}
+    ${"/login"}        | ${"signup-page"}
+    ${"/login"}        | ${"user-page"}
+    ${"/login"}        | ${"activation-page"}
+    ${"/signup"}       | ${"login-page"}
+    ${"/signup"}       | ${"home-page"}
+    ${"/signup"}       | ${"user-page"}
+    ${"/signup"}       | ${"activation-page"}
+    ${"/user/1"}       | ${"signup-page"}
+    ${"/user/1"}       | ${"login-page"}
+    ${"/user/1"}       | ${"home-page"}
+    ${"/user/1"}       | ${"activation-page"}
+    ${"/activate/123"} | ${"home-page"}
+    ${"/activate/123"} | ${"signup-page"}
+    ${"/activate/123"} | ${"login-page"}
+    ${"/activate/123"} | ${"user-page"}
   `("not displays $pageTestId when at $path", async ({ path, pageTestId }) => {
     await setup(path);
 
