@@ -18,6 +18,10 @@ const routes = [
     path: "/user/:id",
     component: () => import("../pages/UserPage.vue"),
   },
+  {
+    path: "/activate/:token",
+    component: () => import("../pages/AccountActivationPage.vue"),
+  },
 ];
 
 const router = createRouter({ routes, history: createWebHistory() });
