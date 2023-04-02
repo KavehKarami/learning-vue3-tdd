@@ -12,11 +12,13 @@ const setup = async (path) => {
 
 describe("Routing", () => {
   it.each`
-    path         | pageTestId
-    ${"/"}       | ${"home-page"}
-    ${"/signup"} | ${"signup-page"}
-    ${"/login"}  | ${"login-page"}
-    ${"/user/1"} | ${"user-page"}
+    path               | pageTestId
+    ${"/"}             | ${"home-page"}
+    ${"/signup"}       | ${"signup-page"}
+    ${"/login"}        | ${"login-page"}
+    ${"/user/1"}       | ${"user-page"}
+    ${"/activate/123"} | ${"activation-page"}
+    ${"/activate/321"} | ${"activation-page"}
   `("displays $pageTestId at $path", async ({ path, pageTestId }) => {
     await setup(path);
     const page = screen.queryByTestId(pageTestId);
