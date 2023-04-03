@@ -3,6 +3,22 @@ import i18n from "./locales/i18n";
 import router from "./routes/router";
 import App from "./App.vue";
 import userEvent from "@testing-library/user-event";
+import { setupServer } from "msw/node";
+import { rest } from "msw";
+
+const server = setupServer(
+  rest.post("/api/1.0/users/token/:token", (req, res, ctx) => {
+    return res(ctx.status(200));
+  })
+);
+
+beforeAll(() => server.listen());
+
+beforeEach(() => {
+  server.resetHandlers();
+});
+
+afterAll(async () => await server.close());
 
 const setup = async (path) => {
   render(App, { global: { plugins: [i18n, router] } });
