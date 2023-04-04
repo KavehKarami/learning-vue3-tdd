@@ -34,6 +34,11 @@ describe("Account Activation Page", () => {
     server.use(
       rest.post("/api/1.0/users/token/:token", (req, res, ctx) => {
         counter += 1;
+        if (req.params.token === "5678")
+          return res(
+            ctx.status(400),
+            ctx.json({ message: "Activation Failure" })
+          );
         return res(ctx.status(200));
       })
     );
@@ -49,5 +54,21 @@ describe("Account Activation Page", () => {
     setup("1234");
     await screen.findByTestId("success-message-box");
     expect(counter).toBe(1);
+  });
+
+  it("displays activation failure message when token is incorrect", async () => {
+    setup("5678");
+
+    const messageBox = await screen.findByTestId("failure-message-box");
+    expect(messageBox).toBeInTheDocument();
+  });
+
+  it("displays spinner during activation api call", async () => {
+    setup("5678");
+    const spinner = await screen.findByRole("status");
+    expect(spinner).toBeInTheDocument();
+
+    await screen.findByTestId("failure-message-box");
+    expect(spinner).not.toBeInTheDocument();
   });
 });
