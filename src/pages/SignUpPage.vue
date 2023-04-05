@@ -61,14 +61,7 @@
             :disabled="isButtonDisabled"
             @click.prevent="handleSignUp"
           >
-            <div
-              v-if="isLoading"
-              class="spinner-border text-primary spinner-border-sm"
-              role="status"
-              data-testid="spinner"
-            >
-              <span class="visually-hidden">Loading...</span>
-            </div>
+            <BaseSpinner v-if="isLoading" />
             {{ $t("sign_up") }}
           </button>
         </div>
@@ -85,11 +78,12 @@
 </template>
 
 <script>
+import BaseSpinner from "../components/BaseSpinner.vue";
 import services from "../api/api";
 import BaseInput from "../components/BaseInput.vue";
 export default {
   name: "SignUpPage",
-  components: { BaseInput },
+  components: { BaseInput, BaseSpinner },
   data() {
     return {
       isLoading: false,

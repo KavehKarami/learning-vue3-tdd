@@ -15,20 +15,16 @@
       Account Activated Failure
     </div>
 
-    <div
-      v-if="!isSuccess && !isFail"
-      class="spinner-border text-primary spinner-border-sm"
-      role="status"
-      data-testid="spinner"
-    >
-      <span class="visually-hidden">Loading...</span>
-    </div>
+    <BaseSpinner v-if="!isSuccess && !isFail" size="normal" />
   </div>
 </template>
 
 <script>
+import BaseSpinner from "../components/BaseSpinner.vue";
 import services from "../api/api.js";
+
 export default {
+  components: { BaseSpinner },
   data() {
     return {
       isSuccess: false,
