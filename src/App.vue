@@ -41,7 +41,7 @@
     </nav>
   </div>
 
-  <div class="container">
+  <div class="container mt-3 mt-md-4">
     <router-view />
     <language-selector />
   </div>
