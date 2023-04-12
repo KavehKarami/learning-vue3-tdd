@@ -13,4 +13,8 @@ export default {
   activate(token) {
     return axios.post("/api/1.0/users/token/" + token);
   },
+
+  getUsers() {
+    return axios.get("/api/1.0/users/");
+  },
 };
