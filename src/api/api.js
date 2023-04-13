@@ -15,6 +15,6 @@ export default {
   },
 
   getUsers() {
-    return axios.get("/api/1.0/users/");
+    return axios.get("/api/1.0/users/", { params: { page: 0, size: 3 } });
   },
 };
