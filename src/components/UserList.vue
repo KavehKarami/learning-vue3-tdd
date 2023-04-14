@@ -13,10 +13,22 @@
         {{ user.username }}
       </li>
     </ul>
-    <button v-if="page.page" @click="loadPrev">&lt; previous</button>
-    <button v-if="page.page + 1 < page.totalPages" @click="loadNext">
-      next &gt;
-    </button>
+    <div class="card-footer">
+      <button
+        v-if="page.page"
+        class="btn btn-outline-secondary btn-sm"
+        @click="loadData(page.page - 1)"
+      >
+        &lt; previous
+      </button>
+      <button
+        v-if="page.page + 1 < page.totalPages"
+        class="btn btn-outline-secondary btn-sm float-end"
+        @click="loadData(page.page + 1)"
+      >
+        next &gt;
+      </button>
+    </div>
   </div>
 </template>
 <script>
@@ -33,22 +45,13 @@ export default {
     };
   },
   mounted() {
-    services
-      .getUsers()
-      .then((response) => (this.page = response.data))
-      .catch((e) => console.log(e));
+    this.loadData();
   },
 
   methods: {
-    loadNext() {
+    loadData(page = 0) {
       services
-        .getUsers(this.page.page + 1)
-        .then((response) => (this.page = response.data))
-        .catch((e) => console.log(e));
-    },
-    loadPrev() {
-      services
-        .getUsers(this.page.page - 1)
+        .getUsers(page)
         .then((response) => (this.page = response.data))
         .catch((e) => console.log(e));
     },
