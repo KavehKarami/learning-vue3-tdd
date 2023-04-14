@@ -13,6 +13,22 @@
         {{ user.username }}
       </li>
     </ul>
+    <div class="card-footer">
+      <button
+        v-if="page.page"
+        class="btn btn-outline-secondary btn-sm"
+        @click="loadData(page.page - 1)"
+      >
+        &lt; previous
+      </button>
+      <button
+        v-if="page.page + 1 < page.totalPages"
+        class="btn btn-outline-secondary btn-sm float-end"
+        @click="loadData(page.page + 1)"
+      >
+        next &gt;
+      </button>
+    </div>
   </div>
 </template>
 <script>
@@ -29,10 +45,16 @@ export default {
     };
   },
   mounted() {
-    services
-      .getUsers()
-      .then((response) => (this.page = response.data))
-      .catch((e) => console.log(e));
+    this.loadData();
+  },
+
+  methods: {
+    loadData(page = 0) {
+      services
+        .getUsers(page)
+        .then((response) => (this.page = response.data))
+        .catch((e) => console.log(e));
+    },
   },
 };
 </script>
