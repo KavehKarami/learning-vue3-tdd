@@ -13,6 +13,10 @@
         {{ user.username }}
       </li>
     </ul>
+    <button v-if="page.page" @click="loadPrev">&lt; previous</button>
+    <button v-if="page.page + 1 < page.totalPages" @click="loadNext">
+      next &gt;
+    </button>
   </div>
 </template>
 <script>
@@ -33,6 +37,21 @@ export default {
       .getUsers()
       .then((response) => (this.page = response.data))
       .catch((e) => console.log(e));
+  },
+
+  methods: {
+    loadNext() {
+      services
+        .getUsers(this.page.page + 1)
+        .then((response) => (this.page = response.data))
+        .catch((e) => console.log(e));
+    },
+    loadPrev() {
+      services
+        .getUsers(this.page.page - 1)
+        .then((response) => (this.page = response.data))
+        .catch((e) => console.log(e));
+    },
   },
 };
 </script>
