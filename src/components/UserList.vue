@@ -9,6 +9,7 @@
         v-for="user in page.content"
         :key="user.id"
         class="list-group-item list-group-item-action"
+        @click="$router.push('/user/' + user.id)"
       >
         {{ user.username }}
       </li>
@@ -58,3 +59,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+li.list-group-item-action {
+  cursor: pointer;
+}
+</style>
