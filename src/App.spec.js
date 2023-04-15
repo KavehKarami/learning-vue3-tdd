@@ -14,7 +14,14 @@ const server = setupServer(
     return res(
       ctx.status(200),
       ctx.json({
-        content: [],
+        content: [
+          {
+            id: 1,
+            username: "user-in-list",
+            email: "user-in-list@mail.com",
+            image: null,
+          },
+        ],
         page: 0,
         size: 0,
         totalPages: 0,
@@ -86,6 +93,15 @@ describe("Routing", () => {
     const brandLogo = screen.queryByTestId("brand-logo");
     await userEvent.click(brandLogo);
     const page = screen.queryByTestId("home-page");
+    expect(page).toBeInTheDocument();
+  });
+
+  it("navigates to user page when clicking the username on user list", async () => {
+    await setup("/");
+    const user = await screen.findByText("user-in-list");
+    await userEvent.click(user);
+
+    const page = screen.queryByTestId("user-page");
     expect(page).toBeInTheDocument();
   });
 });
