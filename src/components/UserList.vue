@@ -11,7 +11,7 @@
         class="list-group-item list-group-item-action"
         @click="$router.push('/user/' + user.id)"
       >
-        {{ user.username }}
+        <user-list-item :user="user" />
       </li>
     </ul>
     <div class="card-footer">
@@ -34,7 +34,9 @@
 </template>
 <script>
 import services from "../api/api.js";
+import UserListItem from "./UserListItem.vue";
 export default {
+  components: { UserListItem },
   data() {
     return {
       page: {
