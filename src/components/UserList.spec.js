@@ -99,4 +99,25 @@ describe("User List", () => {
     const page1 = await screen.findByText("user1");
     expect(page1).toBeInTheDocument();
   });
+  // FIXME
+  xit("displays spinner during the api call is in progress", async () => {
+    await setup();
+    const spinner = screen.queryByRole("status");
+    expect(spinner).toBeInTheDocument();
+  });
+  it("hides spinner after api call is compeleted", async () => {
+    await setup();
+    await screen.findByText("user1");
+    const spinner = screen.queryByRole("status");
+    expect(spinner).not.toBeInTheDocument();
+  });
+
+  it("displays spinner after clicking next", async () => {
+    await setup();
+    await screen.findByText("user1");
+    const nextPageLink = await screen.findByText("next >");
+    userEvent.click(nextPageLink);
+    const spinner = await screen.findByRole("status");
+    expect(spinner).toBeInTheDocument();
+  });
 });
