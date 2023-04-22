@@ -6,5 +6,8 @@
   "password": "رمز عبور",
   "password_repeat": "تکرار رمز عبور",
   "password_mismatch": "رمز عبور یکسان نیست",
-  "successful_sign_up": "لطفا ایمیل خود را برای فعال‌سازی اکانت چک کنید"
+  "successful_sign_up": "لطفا ایمیل خود را برای فعال‌سازی اکانت چک کنید",
+  "users": "کاربران",
+  "nextPage": "بعدی >",
+  "prevPage": "< قبلی"
 }
