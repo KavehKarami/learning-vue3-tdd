@@ -3,7 +3,11 @@ import { setupServer } from "msw/node";
 import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 import UserList from "./UserList.vue";
+import LanguageSelector from "./LanguageSelector.vue";
 import router from "../routes/router";
+import i18n from "../locales/i18n";
+import en from "../locales/en.json";
+import fa from "../locales/fa.json";
 
 const server = setupServer(
   rest.get("/api/1.0/users", async (req, res, ctx) => {
@@ -43,11 +47,19 @@ const users = [
   { id: 7, username: "user7", email: "user7@mail.com", image: null },
 ];
 
-describe("User List", () => {
-  const setup = async () => {
-    render(UserList, { global: { plugins: [router] } });
-    await router.isReady();
+const setup = async () => {
+  const app = {
+    components: {
+      UserList,
+      LanguageSelector,
+    },
+    template: `<UserList /> <LanguageSelector/>`,
   };
+  render(app, { global: { plugins: [router, i18n] } });
+  await router.isReady();
+};
+
+describe("User List", () => {
   it("displays theree users in list", async () => {
     await setup();
 
@@ -119,5 +131,33 @@ describe("User List", () => {
     userEvent.click(nextPageLink);
     const spinner = await screen.findByRole("status");
     expect(spinner).toBeInTheDocument();
+  });
+});
+
+describe("Internationalization", () => {
+  it("initially displays header and navigation links in english", async () => {
+    await setup();
+    await screen.findByText("user1");
+    const nextPageLink = await screen.findByText("next >");
+    await userEvent.click(nextPageLink);
+    await screen.findByText("user4");
+
+    expect(screen.queryByText(en.users)).toBeInTheDocument();
+    expect(screen.queryByText(en.nextPage)).toBeInTheDocument();
+    expect(screen.queryByText(en.prevPage)).toBeInTheDocument();
+  });
+  it("displays header and navigation links in persian after selecting that language", async () => {
+    await setup();
+    await screen.findByText("user1");
+    const nextPageLink = await screen.findByText("next >");
+    await userEvent.click(nextPageLink);
+    await screen.findByText("user4");
+
+    const persianLang = await screen.findByTestId("persianLang");
+    await userEvent.click(persianLang);
+
+    expect(screen.queryByText(fa.users)).toBeInTheDocument();
+    expect(screen.queryByText(fa.nextPage)).toBeInTheDocument();
+    expect(screen.queryByText(fa.prevPage)).toBeInTheDocument();
   });
 });
