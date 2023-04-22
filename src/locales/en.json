@@ -6,5 +6,8 @@
   "password": "Password",
   "password_repeat": "Password Repeat",
   "password_mismatch": "Password mismatch",
-  "successful_sign_up": "Please Check Your E-mail to active your account"
+  "successful_sign_up": "Please Check Your E-mail to active your account",
+  "users": "Users",
+  "nextPage": "next >",
+  "prevPage": "< previous"
 }

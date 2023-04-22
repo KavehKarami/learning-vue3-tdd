@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <h3>Users</h3>
+      <h3>{{ $t("users") }}</h3>
     </div>
 
     <ul v-if="page.content.length" class="list-group list-group-flush">
@@ -20,14 +20,14 @@
         class="btn btn-outline-secondary btn-sm float-start"
         @click="loadData(page.page - 1)"
       >
-        &lt; previous
+        {{ $t("prevPage") }}
       </button>
       <button
         v-if="page.page + 1 < page.totalPages && !isLoading"
         class="btn btn-outline-secondary btn-sm float-end"
         @click="loadData(page.page + 1)"
       >
-        next &gt;
+        {{ $t("nextPage") }}
       </button>
 
       <BaseSpinner v-if="isLoading" size="normal" />
