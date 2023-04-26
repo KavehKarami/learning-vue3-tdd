@@ -1,12 +1,15 @@
 <template>
   <div data-testid="user-page">
-    {{ user.username }}
+    <ProfileCard :user="user" />
   </div>
 </template>
 
 <script>
 import services from "../api/api";
+import ProfileCard from "../components/ProfileCard.vue";
 export default {
+  name: "UserPage",
+  components: { ProfileCard },
   data() {
     return {
       user: {},
