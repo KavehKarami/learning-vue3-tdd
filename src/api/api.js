@@ -17,4 +17,8 @@ export default {
   getUsers(page = 0) {
     return axios.get("/api/1.0/users/", { params: { page, size: 3 } });
   },
+
+  getUserById(id) {
+    return axios.get("/api/1.0/users/" + id);
+  },
 };
