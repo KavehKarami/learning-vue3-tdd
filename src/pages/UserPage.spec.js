@@ -5,15 +5,17 @@ import UserPage from "./UserPage.vue";
 
 const server = setupServer(
   rest.get("/api/1.0/users/:id", async (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        username: "user1",
-        email: "user1@gmail.com",
-        image: null,
-        id: 1,
-      })
-    );
+    if (req.params.id === "1")
+      return res(
+        ctx.status(200),
+        ctx.json({
+          username: "user1",
+          email: "user1@gmail.com",
+          image: null,
+          id: 1,
+        })
+      );
+    else return res(ctx.status(404), ctx.json({ message: "User Not Found" }));
   })
 );
 
@@ -23,11 +25,11 @@ beforeEach(() => {
   server.resetHandlers();
 });
 
-const setup = () => {
+const setup = ({ id = 1 } = {}) => {
   render(UserPage, {
     global: {
       mocks: {
-        $route: { params: { id: 1 } },
+        $route: { params: { id } },
       },
     },
   });
@@ -52,5 +54,10 @@ describe("User Page", () => {
     await screen.findByText("user1");
     const spinner = await screen.queryByRole("status");
     expect(spinner).not.toBeInTheDocument();
+  });
+
+  it("displays error message recived from backend when the user not found", async () => {
+    setup({ id: 100 });
+    expect(await screen.findByText("User Not Found")).toBeInTheDocument();
   });
 });
