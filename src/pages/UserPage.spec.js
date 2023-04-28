@@ -23,18 +23,34 @@ beforeEach(() => {
   server.resetHandlers();
 });
 
+const setup = () => {
+  render(UserPage, {
+    global: {
+      mocks: {
+        $route: { params: { id: 1 } },
+      },
+    },
+  });
+};
+
 describe("User Page", () => {
   it("displays username on page when user is found", async () => {
-    render(UserPage, {
-      global: {
-        mocks: {
-          $route: { params: { id: 1 } },
-        },
-      },
-    });
-
+    setup();
     await waitFor(() => {
       expect(screen.queryByText("user1")).toBeInTheDocument();
     });
+  });
+
+  it("displays spinner while the api call is in progress", () => {
+    setup();
+    const spinner = screen.queryByRole("status");
+    expect(spinner).toBeInTheDocument();
+  });
+
+  it("not displays spinner when the api call is not in progress", async () => {
+    setup();
+    await screen.findByText("user1");
+    const spinner = await screen.queryByRole("status");
+    expect(spinner).not.toBeInTheDocument();
   });
 });
