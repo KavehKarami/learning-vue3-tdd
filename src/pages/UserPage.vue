@@ -1,8 +1,12 @@
 <template>
   <div data-testid="user-page">
-    <ProfileCard v-if="!isLoading" :user="user" />
+    <ProfileCard v-if="!isLoading && !failMessage" :user="user" />
     <div v-if="isLoading" class="alert alert-secondary text-center">
       <BaseSpinner size="normal" />
+    </div>
+
+    <div v-if="failMessage" class="alert alert-danger text-center">
+      {{ failMessage }}
     </div>
   </div>
 </template>
@@ -18,6 +22,7 @@ export default {
     return {
       user: {},
       isLoading: true,
+      failMessage: "",
     };
   },
 
@@ -26,7 +31,7 @@ export default {
       const { data: user } = await services.getUserById(this.$route.params.id);
       this.user = user;
     } catch (e) {
-      console.log(e.message);
+      this.failMessage = e.response.data.message;
     } finally {
       this.isLoading = false;
     }
