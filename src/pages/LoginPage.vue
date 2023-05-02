@@ -31,7 +31,7 @@
           <button
             class="btn btn-outline-primary mt-3"
             data-testid="submit"
-            disabled
+            :disabled="isDisabled"
           >
             Login
           </button>
@@ -53,6 +53,12 @@ export default {
       email: "",
       password: "",
     };
+  },
+
+  computed: {
+    isDisabled() {
+      return !(this.email && this.password);
+    },
   },
 };
 </script>
