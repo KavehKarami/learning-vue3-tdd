@@ -31,7 +31,7 @@
           <button
             class="btn btn-outline-primary mt-3"
             data-testid="submit"
-            :disabled="isDisabled || isLoading"
+            :disabled="isDisabled"
             @click.prevent="login"
           >
             <base-spinner v-if="isLoading" />
@@ -67,6 +67,7 @@ export default {
 
   methods: {
     async login() {
+      if (this.isLoading) return;
       this.isLoading = true;
       try {
         await services.login({ email: this.email, password: this.password });
