@@ -31,7 +31,7 @@
           <button
             class="btn btn-outline-primary mt-3"
             data-testid="submit"
-            :disabled="isDisabled"
+            :disabled="isDisabled || isLoading"
             @click.prevent="login"
           >
             <base-spinner v-if="isLoading" />

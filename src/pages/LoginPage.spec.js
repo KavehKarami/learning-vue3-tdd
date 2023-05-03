@@ -4,9 +4,11 @@ import { setupServer } from "msw/node";
 import { rest } from "msw";
 import LoginPage from "./LoginPage.vue";
 
-let requestBody;
+let requestBody,
+  counter = 0;
 const server = setupServer(
   rest.post("/api/1.0/auth", async (req, res, ctx) => {
+    counter += 1;
     requestBody = await req.json();
     return res(ctx.status(401));
   })
@@ -15,6 +17,7 @@ const server = setupServer(
 beforeAll(() => server.listen());
 
 beforeEach(() => {
+  counter = 0;
   server.resetHandlers();
 });
 
@@ -95,6 +98,14 @@ describe("Login Page", () => {
         email: "user@mail.com",
         password: "Aa123456",
       });
+    });
+
+    it("disable button when there is an api call", async () => {
+      await setupFilled();
+      userEvent.click(button);
+      userEvent.click(button);
+      await screen.findByRole("status");
+      expect(counter).toBe(1);
     });
   });
 });
