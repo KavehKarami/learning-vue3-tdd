@@ -32,7 +32,9 @@
             class="btn btn-outline-primary mt-3"
             data-testid="submit"
             :disabled="isDisabled"
+            @click.prevent="login"
           >
+            <base-spinner v-if="isLoading" />
             Login
           </button>
         </div>
@@ -42,10 +44,12 @@
 </template>
 
 <script>
+import BaseSpinner from "../components/BaseSpinner.vue";
 import BaseInput from "../components/BaseInput.vue";
+import services from "../api/api";
 export default {
   name: "SignUpPage",
-  components: { BaseInput },
+  components: { BaseInput, BaseSpinner },
   data() {
     return {
       isLoading: false,
@@ -58,6 +62,19 @@ export default {
   computed: {
     isDisabled() {
       return !(this.email && this.password);
+    },
+  },
+
+  methods: {
+    async login() {
+      this.isLoading = true;
+      try {
+        await services.login({ email: this.email, password: this.password });
+      } catch (e) {
+        // console.log(e);
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
 };
