@@ -21,4 +21,8 @@ export default {
   getUserById(id) {
     return axios.get("/api/1.0/users/" + id);
   },
+
+  login(creds) {
+    return axios.post("/api/1.0/auth", creds);
+  },
 };
