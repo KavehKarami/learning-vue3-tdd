@@ -27,6 +27,10 @@
           v-model="password"
         />
 
+        <div v-if="failMessage" class="alert alert-danger text-center">
+          {{ failMessage }}
+        </div>
+
         <div class="text-center">
           <button
             class="btn btn-outline-primary mt-3"
@@ -56,12 +60,22 @@ export default {
       isAccountActivation: false,
       email: "",
       password: "",
+      failMessage: "",
     };
   },
 
   computed: {
     isDisabled() {
       return !(this.email && this.password);
+    },
+  },
+
+  watch: {
+    email() {
+      if (this.failMessage) this.failMessage = "";
+    },
+    password() {
+      if (this.failMessage) this.failMessage = "";
     },
   },
 
@@ -73,6 +87,7 @@ export default {
         await services.login({ email: this.email, password: this.password });
       } catch (e) {
         // console.log(e);
+        this.failMessage = e.response.data.message;
       } finally {
         this.isLoading = false;
       }
