@@ -10,7 +10,7 @@ const server = setupServer(
   rest.post("/api/1.0/auth", async (req, res, ctx) => {
     counter += 1;
     requestBody = await req.json();
-    return res(ctx.status(401));
+    return res(ctx.status(401), ctx.json({ message: "Incorrect credentials" }));
   })
 );
 
@@ -106,6 +106,28 @@ describe("Login Page", () => {
       userEvent.click(button);
       await screen.findByRole("status");
       expect(counter).toBe(1);
+    });
+    it("display authentication fail message", async () => {
+      await setupFilled();
+      await userEvent.click(button);
+      const failMessage = await screen.findByText("Incorrect credentials");
+      expect(failMessage).toBeInTheDocument();
+    });
+    it("clears authentication fail message when email field is changed", async () => {
+      await setupFilled();
+      await userEvent.click(button);
+      const failMessage = await screen.findByText("Incorrect credentials");
+      await userEvent.type(emailInput, "newEmail@mail.com");
+
+      expect(failMessage).not.toBeInTheDocument();
+    });
+
+    it("clears authentication fail message when password field is changed", async () => {
+      await setupFilled();
+      await userEvent.click(button);
+      const failMessage = await screen.findByText("Incorrect credentials");
+      await userEvent.type(passwordInput, "adsasd123123");
+      expect(failMessage).not.toBeInTheDocument();
     });
   });
 });
