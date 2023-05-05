@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/vue";
+import { render, screen, waitFor } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
@@ -111,7 +111,9 @@ describe("Login Page", () => {
       userEvent.click(button);
       userEvent.click(button);
       await screen.findByRole("status");
-      expect(counter).toBe(1);
+      await waitFor(() => {
+        expect(counter).toBe(1);
+      });
     });
     it("display authentication fail message", async () => {
       await setupFilled();
@@ -138,7 +140,7 @@ describe("Login Page", () => {
   });
 
   describe("Internationalization", () => {
-    let persianLanguage, passowrdInput, button, emailInput;
+    let persianLanguage, passowrdInput, loginButton, emailInput;
     const setupTranslation = () => {
       const app = {
         name: "App",
@@ -153,7 +155,7 @@ describe("Login Page", () => {
       persianLanguage = screen.queryByTestId("persianLang");
       emailInput = screen.queryByTestId("emailInput");
       passowrdInput = screen.queryByTestId("passwordInput");
-      button = screen.queryByTestId("submit");
+      loginButton = screen.queryByTestId("submit");
     };
 
     it("initially displays all text in english", async () => {
@@ -185,8 +187,8 @@ describe("Login Page", () => {
       await userEvent.click(persianLanguage);
       await userEvent.type(emailInput, "a");
       await userEvent.type(passowrdInput, "asd");
-      await userEvent.click(button);
+      await userEvent.click(loginButton);
       expect(acceptLanguage).toBe("fa");
     });
   });
-}); 
+});
