@@ -23,6 +23,10 @@ export default {
   },
 
   login(creds) {
-    return axios.post("/api/1.0/auth", creds);
+    return axios.post("/api/1.0/auth", creds, {
+      headers: {
+        "Accept-Language": i18n.global.locale,
+      },
+    });
   },
 };
