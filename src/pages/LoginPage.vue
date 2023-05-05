@@ -8,21 +8,21 @@
       class="mt-5 card"
       data-testid="signup-form"
     >
-      <h1 class="card-header text-center">Login</h1>
+      <h1 class="card-header text-center">{{ $t("login") }}</h1>
       <form class="card-body">
         <base-input
           id="email"
-          title="Email"
-          placeholder="Email"
+          :title="$t('email')"
+          :placeholder="$t('email')"
           data-testid="emailInput"
           v-model="email"
         />
 
         <base-input
           id="password"
-          title="Password"
+          :title="$t('password')"
           type="password"
-          placeholder="Password"
+          :placeholder="$t('password')"
           data-testid="passwordInput"
           v-model="password"
         />
@@ -39,7 +39,7 @@
             @click.prevent="login"
           >
             <base-spinner v-if="isLoading" />
-            Login
+            {{ $t("login") }}
           </button>
         </div>
       </form>
