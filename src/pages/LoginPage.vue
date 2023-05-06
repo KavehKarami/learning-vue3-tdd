@@ -85,6 +85,7 @@ export default {
       this.isLoading = true;
       try {
         await services.login({ email: this.email, password: this.password });
+        this.$router.push("/");
       } catch (e) {
         // console.log(e);
         this.failMessage = e.response.data.message;
