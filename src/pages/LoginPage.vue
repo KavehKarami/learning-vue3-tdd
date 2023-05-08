@@ -32,15 +32,13 @@
         </div>
 
         <div class="text-center">
-          <button
-            class="btn btn-outline-primary mt-3"
-            data-testid="submit"
+          <button-with-progress
             :disabled="isDisabled"
-            @click.prevent="login"
+            :is-loading="isLoading"
+            :on-click="login"
           >
-            <base-spinner v-if="isLoading" />
             {{ $t("login") }}
-          </button>
+          </button-with-progress>
         </div>
       </form>
     </div>
@@ -48,12 +46,12 @@
 </template>
 
 <script>
-import BaseSpinner from "../components/BaseSpinner.vue";
 import BaseInput from "../components/BaseInput.vue";
 import services from "../api/api";
+import ButtonWithProgress from "../components/ButtonWithProgress.vue";
 export default {
   name: "SignUpPage",
-  components: { BaseInput, BaseSpinner },
+  components: { BaseInput, ButtonWithProgress },
   data() {
     return {
       isLoading: false,
