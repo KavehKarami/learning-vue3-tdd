@@ -3,13 +3,11 @@
     class="col-lg-6 offset-lg-3 col-md-8 offset-md-2"
     data-testid="signup-page"
   >
-    <div
-      v-if="!isAccountActivation"
-      class="mt-5 card"
-      data-testid="signup-form"
-    >
-      <h1 class="card-header text-center">{{ $t("sign_up") }}</h1>
-      <form class="card-body">
+    <base-card v-if="!isAccountActivation" data-testid="signup-form">
+      <template v-slot:header>
+        <h1>{{ $t("sign_up") }}</h1>
+      </template>
+      <template v-slot:body>
         <base-input
           id="username"
           :title="$t('username')"
@@ -63,8 +61,8 @@
             {{ $t("sign_up") }}
           </button-with-progress>
         </div>
-      </form>
-    </div>
+      </template>
+    </base-card>
     <div
       v-else
       class="mt-5 alert alert-success"
@@ -79,9 +77,10 @@
 import services from "../api/api";
 import ButtonWithProgress from "../components/ButtonWithProgress.vue";
 import BaseInput from "../components/BaseInput.vue";
+import BaseCard from "../components/BaseCard.vue";
 export default {
   name: "SignUpPage",
-  components: { BaseInput, ButtonWithProgress },
+  components: { BaseInput, ButtonWithProgress, BaseCard },
   data() {
     return {
       isLoading: false,
