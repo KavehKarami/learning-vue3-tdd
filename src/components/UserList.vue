@@ -1,8 +1,8 @@
 <template>
-  <div class="card">
-    <div class="card-header">
+  <base-card>
+    <template v-slot:header>
       <h3>{{ $t("users") }}</h3>
-    </div>
+    </template>
 
     <ul v-if="page.content.length" class="list-group list-group-flush">
       <li
@@ -14,7 +14,8 @@
         <UserListItem :user="user" />
       </li>
     </ul>
-    <div class="card-footer text-center">
+
+    <template v-slot:footer>
       <button
         v-if="page.page && !isLoading"
         class="btn btn-outline-secondary btn-sm float-start"
@@ -31,16 +32,17 @@
       </button>
 
       <BaseSpinner v-if="isLoading" size="normal" />
-    </div>
-  </div>
+    </template>
+  </base-card>
 </template>
 <script>
 import services from "../api/api.js";
+import BaseCard from "./BaseCard.vue";
 import BaseSpinner from "./BaseSpinner.vue";
 import UserListItem from "./UserListItem.vue";
 
 export default {
-  components: { UserListItem, BaseSpinner },
+  components: { UserListItem, BaseSpinner, BaseCard },
 
   data() {
     return {
