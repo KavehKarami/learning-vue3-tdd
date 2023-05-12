@@ -4,18 +4,20 @@ const store = createStore({
   state() {
     return {
       isLoggedIn: false,
+      id: null,
     };
   },
 
   mutations: {
-    LOGIN_STATUS(state, status) {
-      state.isLoggedIn = status;
+    LOGIN_STATUS(state, userData) {
+      state.isLoggedIn = true;
+      state.id = userData.id;
     },
   },
 
   actions: {
-    loginStatus({ commit }, status) {
-      commit("LOGIN_STATUS", status);
+    loginStatus({ commit }, userData) {
+      commit("LOGIN_STATUS", userData);
     },
   },
 });
