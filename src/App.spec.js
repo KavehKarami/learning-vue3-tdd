@@ -5,6 +5,7 @@ import App from "./App.vue";
 import userEvent from "@testing-library/user-event";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
+import store from "./store";
 
 const server = setupServer(
   rest.post("/api/1.0/users/token/:token", (req, res, ctx) => {
@@ -39,6 +40,9 @@ const server = setupServer(
         id,
       })
     );
+  }),
+  rest.post("/api/1.0/auth", (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({ username: "user5", id: 5 }));
   })
 );
 
@@ -51,7 +55,7 @@ beforeEach(() => {
 afterAll(async () => await server.close());
 
 const setup = async (path) => {
-  render(App, { global: { plugins: [i18n, router] } });
+  render(App, { global: { plugins: [i18n, router, store] } });
   router.replace(path);
   await router.isReady();
 };
@@ -141,18 +145,40 @@ describe.each`
 });
 
 describe("Login", () => {
-  it("redirects to homepage after successful login", async () => {
-    server.use(
-      rest.post("/api/1.0/auth", (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json({ username: "user7" }));
-      })
-    );
+  const setupLoggedIn = async () => {
     await setup("/login");
     await userEvent.type(screen.queryByTestId("emailInput"), "user7@mail.com");
     await userEvent.type(screen.queryByTestId("passwordInput"), "p@ssword1");
     await userEvent.click(screen.queryByTestId("submit"));
-
+  };
+  it("redirects to homepage after successful login", async () => {
+    await setupLoggedIn();
     const page = await screen.findByTestId("home-page");
     expect(page).toBeInTheDocument();
+  });
+  it("hides Login and Sign up links from navbar after successful login", async () => {
+    await setupLoggedIn();
+    await screen.findByTestId("home-page");
+    const loginLink = screen.queryByRole("link", { name: "Login" });
+    const signupLink = screen.queryByRole("link", { name: "Sign Up" });
+
+    expect(loginLink).not.toBeInTheDocument();
+    expect(signupLink).not.toBeInTheDocument();
+  });
+  it("displays My profile link on navbar after successful login", async () => {
+    await setupLoggedIn();
+    await screen.findByTestId("home-page");
+    const myProfileLink = screen.queryByRole("link", { name: "My Profile" });
+
+    expect(myProfileLink).toBeInTheDocument();
+  });
+  it("displays user page for the logged in user after clicking My profile link", async () => {
+    await setupLoggedIn();
+    await screen.findByTestId("home-page");
+    const myProfileLink = screen.queryByRole("link", { name: "My Profile" });
+    await userEvent.click(myProfileLink);
+    await screen.findByTestId("user-page");
+    const header = await screen.findByRole("heading", { name: "user5" });
+    expect(header).toBeInTheDocument();
   });
 });

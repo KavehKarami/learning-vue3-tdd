@@ -81,7 +81,12 @@ export default {
       if (this.isLoading) return;
       this.isLoading = true;
       try {
-        await services.login({ email: this.email, password: this.password });
+        const { data: userData } = await services.login({
+          email: this.email,
+          password: this.password,
+        });
+
+        this.$store.dispatch("loginStatus", userData);
         this.$router.push("/");
       } catch (e) {
         // console.log(e);
