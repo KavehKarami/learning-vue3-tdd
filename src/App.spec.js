@@ -5,7 +5,7 @@ import App from "./App.vue";
 import userEvent from "@testing-library/user-event";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
-import store from './store'
+import store from "./store";
 
 const server = setupServer(
   rest.post("/api/1.0/users/token/:token", (req, res, ctx) => {
@@ -42,7 +42,7 @@ const server = setupServer(
     );
   }),
   rest.post("/api/1.0/auth", (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({ username: "user5" }));
+    return res(ctx.status(200), ctx.json({ username: "user5", id: 5 }));
   })
 );
 
@@ -164,5 +164,21 @@ describe("Login", () => {
 
     expect(loginLink).not.toBeInTheDocument();
     expect(signupLink).not.toBeInTheDocument();
+  });
+  it("displays My profile link on navbar after successful login", async () => {
+    await setupLoggedIn();
+    await screen.findByTestId("home-page");
+    const myProfileLink = screen.queryByRole("link", { name: "My Profile" });
+
+    expect(myProfileLink).toBeInTheDocument();
+  });
+  it("displays user page for the logged in user after clicking My profile link", async () => {
+    await setupLoggedIn();
+    await screen.findByTestId("home-page");
+    const myProfileLink = screen.queryByRole("link", { name: "My Profile" });
+    await userEvent.click(myProfileLink);
+    await screen.findByTestId("user-page");
+    const header = await screen.findByRole("heading", { name: "user5" });
+    expect(header).toBeInTheDocument();
   });
 });
