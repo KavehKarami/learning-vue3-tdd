@@ -17,7 +17,7 @@
           Hoaxify
         </router-link>
 
-        <ul class="navbar-nav ms-auto">
+        <ul v-if="!$store.state.isLoggedIn" class="navbar-nav ms-auto">
           <li>
             <router-link
               class="nav-link"

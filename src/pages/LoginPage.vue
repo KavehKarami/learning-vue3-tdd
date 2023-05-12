@@ -82,6 +82,8 @@ export default {
       this.isLoading = true;
       try {
         await services.login({ email: this.email, password: this.password });
+
+        this.$store.dispatch("loginStatus", true);
         this.$router.push("/");
       } catch (e) {
         // console.log(e);
