@@ -5,7 +5,7 @@ import App from "./App.vue";
 import userEvent from "@testing-library/user-event";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
-import store from "./store";
+import store, { resetAuthState } from "./store";
 
 const server = setupServer(
   rest.post("/api/1.0/users/token/:token", (req, res, ctx) => {
@@ -151,6 +151,12 @@ describe("Login", () => {
     await userEvent.type(screen.queryByTestId("passwordInput"), "p@ssword1");
     await userEvent.click(screen.queryByTestId("submit"));
   };
+
+  afterEach(() => {
+    localStorage.clear();
+    resetAuthState();
+  });
+
   it("redirects to homepage after successful login", async () => {
     await setupLoggedIn();
     const page = await screen.findByTestId("home-page");
@@ -180,5 +186,21 @@ describe("Login", () => {
     await screen.findByTestId("user-page");
     const header = await screen.findByRole("heading", { name: "user5" });
     expect(header).toBeInTheDocument();
+  });
+
+  it("stores logged in state in local storage", async () => {
+    await setupLoggedIn();
+    await screen.findByTestId("home-page");
+
+    const state = JSON.parse(localStorage.getItem("auth"));
+    expect(state.isLoggedIn).toBeTruthy();
+  });
+
+  it("displays layout if logged in state", async () => {
+    localStorage.setItem("auth", JSON.stringify({ isLoggedIn: true, id: 5 }));
+    resetAuthState();
+    await setup("/");
+    const myProfileLink = screen.queryByRole("link", { name: "My Profile" });
+    expect(myProfileLink).toBeInTheDocument();
   });
 });
