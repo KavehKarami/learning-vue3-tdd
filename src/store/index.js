@@ -1,9 +1,10 @@
 import { createStore } from "vuex";
+import * as storage from "./storage";
 
 const store = createStore({
   state() {
     return (
-      JSON.parse(localStorage.getItem("auth")) || {
+      storage.getItem("auth") || {
         isLoggedIn: false,
         id: null,
       }
@@ -34,11 +35,11 @@ const store = createStore({
 });
 
 store.subscribe((mutation, state) => {
-  localStorage.setItem("auth", JSON.stringify(state));
+  storage.setItem("auth", state);
 });
 
 export const resetAuthState = () => {
-  store.dispatch("reset", JSON.parse(localStorage.getItem("auth")));
+  store.dispatch("reset", storage.getItem("auth"));
 };
 
 export default store;
