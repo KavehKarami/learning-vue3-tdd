@@ -86,7 +86,10 @@ export default {
           password: this.password,
         });
 
-        this.$store.dispatch("loginStatus", userData);
+        this.$store.dispatch("loginStatus", {
+          ...userData,
+          header: `Bearer ${userData.token}`,
+        });
         this.$router.push("/");
       } catch (e) {
         // console.log(e);
