@@ -14,7 +14,7 @@ const store = createStore({
   mutations: {
     LOGIN_STATUS(state, userData) {
       state.isLoggedIn = true;
-      state.id = userData.id;
+      for (let key in userData) state[key] = userData[key];
     },
     RESET(state, initialState) {
       state.id = null;

@@ -7,6 +7,8 @@ import LanguageSelector from "../components/LanguageSelector.vue";
 import i18n from "../locales/i18n";
 import en from "../locales/en.json";
 import fa from "../locales/fa.json";
+import store from "../store";
+import * as storage from "../store/storage";
 
 let requestBody,
   acceptLanguage,
@@ -31,12 +33,34 @@ afterAll(async () => await server.close());
 
 let emailInput, passwordInput, button;
 const setup = async () => {
-  render(LoginPage, { global: { plugins: [i18n] } });
+  render(LoginPage, {
+    global: {
+      plugins: [i18n, store],
+      mocks: {
+        $router: {
+          push: () => {},
+        },
+      },
+    },
+  });
 
   emailInput = screen.queryByTestId("emailInput");
   passwordInput = screen.queryByTestId("passwordInput");
   button = screen.queryByTestId("submit");
 };
+
+const loginSuccess = () =>
+  rest.post("/api/1.0/auth", (req, res, ctx) =>
+    res(
+      ctx.status(200),
+      ctx.json({
+        id: 5,
+        username: "user5",
+        image: null,
+        token: "abcdefgh",
+      })
+    )
+  );
 
 describe("Login Page", () => {
   describe("Layout", () => {
@@ -136,6 +160,24 @@ describe("Login Page", () => {
       const failMessage = await screen.findByText("Incorrect credentials");
       await userEvent.type(passwordInput, "adsasd123123");
       expect(failMessage).not.toBeInTheDocument();
+    });
+    it("stores id, username and image in storage", async () => {
+      server.use(loginSuccess());
+      await setupFilled();
+      await userEvent.click(button);
+      const storedData = storage.getItem("auth");
+      const keys = Object.keys(storedData);
+      expect(keys.includes("id")).toBeTruthy();
+      expect(keys.includes("username")).toBeTruthy();
+      expect(keys.includes("image")).toBeTruthy();
+    });
+    it("stores authorization header value in storage", async () => {
+      server.use(loginSuccess());
+      await setupFilled();
+      await userEvent.click(button);
+      const storedData = storage.getItem("auth");
+
+      expect(storedData.header).toBe("Bearer abcdefgh");
     });
   });
 
