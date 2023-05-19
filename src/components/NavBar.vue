@@ -42,7 +42,7 @@
               :to="'/user/' + $store.state.id"
               data-testid="profile-nav-link"
             >
-              My Profile
+              {{ $t("myProfile") }}
             </router-link>
           </li>
         </ul>
