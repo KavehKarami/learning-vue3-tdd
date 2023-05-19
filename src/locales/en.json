@@ -9,5 +9,10 @@
   "successful_sign_up": "Please Check Your E-mail to active your account",
   "users": "Users",
   "nextPage": "next >",
-  "prevPage": "< previous"
+  "prevPage": "< previous",
+  "myProfile": "My Profile",
+  "click": "click",
+  "loading": "loading ...",
+  "account_activated_successful": "Account Activated Successful",
+  "account_activated_failure": "Account Activated Failure"
 }

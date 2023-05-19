@@ -9,5 +9,10 @@
   "successful_sign_up": "لطفا ایمیل خود را برای فعال‌سازی اکانت چک کنید",
   "users": "کاربران",
   "nextPage": "بعدی >",
-  "prevPage": "< قبلی"
+  "prevPage": "< قبلی",
+  "myProfile": "پروفایل من",
+  "click": "کلیک",
+  "loading": "بارگذاری ...",
+  "account_activated_successful": "فعال‌سازی اکانت با موفقیت انجام شد",
+  "account_activated_failure": "فعال‌سازی اکانت با خطا مواجه شد"
 }

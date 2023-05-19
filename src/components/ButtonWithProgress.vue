@@ -6,7 +6,7 @@
     @click.prevent="onClick"
   >
     <base-spinner v-if="isLoading" />
-    <slot>Click</slot>
+    <slot>{{ $t("click") }}</slot>
   </button>
 </template>
 

@@ -5,7 +5,7 @@
     role="status"
     data-testid="spinner"
   >
-    <span class="visually-hidden">Loading...</span>
+    <span class="visually-hidden">{{ $t("loading") }}</span>
   </div>
 </template>
 

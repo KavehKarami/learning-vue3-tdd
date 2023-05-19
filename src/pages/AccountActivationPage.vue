@@ -5,14 +5,14 @@
       class="mt-3 alert alert-success"
       data-testid="success-message-box"
     >
-      Account Activated Successful
+      {{ $t("account_activated_successful") }}
     </div>
     <div
       v-if="isFail"
       class="mt-3 alert alert-danger"
       data-testid="failure-message-box"
     >
-      Account Activated Failure
+      {{ $t("account_activated_failure") }}
     </div>
 
     <BaseSpinner v-if="!isSuccess && !isFail" size="normal" />
